@@ -2,8 +2,7 @@ from src.api_handlers.huggingface_api import call_huggingface_bert_api
 import numpy as np
 import json
 
-
-def generate_embeddings(interactions):
+def generate_embeddings(interactions, fallback_embedding=None):
     """
     Given a list of interactions (questions and responses), generate embeddings for each interaction using BERT.
     Returns a numpy array of embeddings.
@@ -25,6 +24,8 @@ def generate_embeddings(interactions):
 
         if embedding is not None:
             embeddings.append(embedding)
+        elif fallback_embedding is not None:
+            embeddings.append(fallback_embedding)
         else:
             # Handle failed embeddings (e.g., by using a zero vector or skipping)
             embeddings.append(np.zeros((768,)))

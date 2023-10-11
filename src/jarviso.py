@@ -15,6 +15,8 @@ OPENAI_API_KEY = API_KEYS["openai_api_key"]
 def interact_with_user():
     interactions = []
     feedbacks = []
+    previous_user_input = ""
+    repeated_question_count = 0
     data_filepath = os.path.join("data", "interactions.csv")
     model_filepath = os.path.join("models", "jarviso_core_brain.h5")
 
@@ -30,14 +32,20 @@ def interact_with_user():
 
     while True:
         user_input = input("User: ")
-        if user_input.lower() == "exit":
-            save_data(interactions, data_filepath)
-            if model:
-                save_model(model, model_filepath)
-            break
 
-        # Get response from GPT
-        gpt_response = call_openai_gpt_api(user_input, OPENAI_API_KEY)
+        # Check for repeated questions
+        if user_input == previous_user_input:
+            repeated_question_count += 1
+        else:
+            repeated_question_count = 0
+        previous_user_input = user_input
+
+        # Handle repeated questions
+        if repeated_question_count > 2:
+            gpt_response = "It seems you're asking about the same topic. Unfortunately, my answer remains the same. Would you like to ask about something else?"
+        else:
+            # Get response from GPT
+            gpt_response = call_openai_gpt_api(user_input, OPENAI_API_KEY)
 
         # Ask for feedback
         feedback = input(f"Jarviso: {gpt_response}\nFeedback (good/bad): ").lower()
