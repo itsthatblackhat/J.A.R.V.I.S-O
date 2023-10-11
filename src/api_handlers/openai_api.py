@@ -1,4 +1,3 @@
-
 import requests
 import json
 
@@ -10,10 +9,11 @@ def call_openai_gpt_api(user_input, api_key):
         "User-Agent": "Jarviso"
     }
     DATA = {
-        "prompt": user_input,
-        "max_tokens": 150
+        "prompt": f"User: {user_input}\nJarviso:",
+        "max_tokens": 150,
+        "temperature": 0.6
     }
-    
+
     try:
         response = requests.post(API_ENDPOINT, headers=HEADERS, data=json.dumps(DATA))
         response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
