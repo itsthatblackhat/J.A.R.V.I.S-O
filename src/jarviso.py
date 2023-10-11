@@ -1,12 +1,12 @@
 
-from api_handlers.openai_api import call_openai_gpt_api
-from decision_maker import train_core_brain, predict_decision
+from src.api_handlers.openai_api import call_openai_gpt_api
+from src.decision_maker import train_core_brain, predict_decision
 from utils.data_loader import load_data, save_data
 from utils.model_loader import load_model, save_model
 import numpy as np
 import os
 
-API_KEY = "YOUR_OPENAI_API_KEY"  # Placeholder, replace with your key
+API_KEY = "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"  # Placeholder, replace with your key
 
 def interact_with_user():
     interactions = []
