@@ -40,10 +40,10 @@ Jarviso maintains a context of user interactions. This context includes user pre
 
 To interact with Jarviso:
 
-\```python
+```python
 from src.jarviso import interact_with_user
 interact_with_user()
-\```
+```
 
 (Note: For the above python code block to work in your README, remove the `\` before the three backticks.)
 
