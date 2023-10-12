@@ -1,56 +1,34 @@
 import tensorflow as tf
 import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense
 
-
-def build_model(input_dim=768, num_classes=3):
-    """
-    Build and return a neural network model.
-
-    Args:
-    - input_dim: Dimension of the input embeddings.
-    - num_classes: Number of output classes.
-
-    Returns:
-    - model: Compiled TensorFlow/Keras model.
-    """
-    model = tf.keras.Sequential([
-        tf.keras.layers.Dense(512, activation='relu', input_shape=(input_dim,)),
-        tf.keras.layers.Dense(256, activation='relu'),
-        tf.keras.layers.Dense(128, activation='relu'),
-        tf.keras.layers.Dense(num_classes, activation='softmax')
-    ])
-
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+def build_model(input_dim):
+    """Build a basic neural network model."""
+    model = Sequential()
+    model.add(Dense(16, input_dim=input_dim, activation='relu'))
+    model.add(Dense(8, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))  # Binary classification
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
 
-def train_core_brain(data, labels, epochs=10, validation_data=None):
-    """
-    Train the core brain neural network.
+def train_core_brain(embeddings, decisions):
+    """Train the core decision-making brain of Jarviso."""
+    # Assuming embeddings is a list of embeddings and decisions is a list of 0s and 1s (0 for bad, 1 for good)
+    if not embeddings or not decisions:
+        return None
 
-    Args:
-    - data: Numpy array of input embeddings.
-    - labels: Numpy array of labels.
-    - epochs: Number of training epochs.
-    - validation_data: Tuple of (val_data, val_labels) for evaluation.
+    input_dim = len(embeddings[0])  # Get the size of an embedding
+    model = build_model(input_dim)
 
-    Returns:
-    - model: Trained TensorFlow/Keras model.
-    """
-    data = np.array(data)
-    labels = np.array(labels)
+    # Convert data to numpy arrays for training
+    X = np.array(embeddings)
+    y = np.array(decisions)
 
-    model = build_model(input_dim=data.shape[1], num_classes=len(set(labels)))
+    model.fit(X, y, epochs=10, batch_size=1)
 
-    if validation_data:
-        val_data, val_labels = validation_data
-        val_data = np.array(val_data)
-        val_labels = np.array(val_labels)
-        validation_data = (val_data, val_labels)
-
-    model.fit(data, labels, epochs=epochs, validation_data=validation_data)
     return model
-
 
 def predict_decision(model, embedded_input):
     """
