@@ -32,10 +32,6 @@ If Jarviso doesn't know an answer, it can search Bing for relevant information, 
 
 Jarviso maintains a context of user interactions. This context includes user preferences and frequently asked questions. It aids in tailoring responses and deciding when to introduce curious questions.
 
-## Installation & Setup
-
-(Here, you would typically include details about how to set up and run Jarviso, any prerequisites, required libraries, etc.)
-
 ## Usage
 
 To interact with Jarviso:
