@@ -45,8 +45,6 @@ from src.jarviso import interact_with_user
 interact_with_user()
 ```
 
-(Note: For the above python code block to work in your README, remove the `\` before the three backticks.)
-
 ## Future Enhancements
 
 As Jarviso evolves, we aim to:
