@@ -1,4 +1,6 @@
 {
-    "openai_api_key": "your stuff here bros",
-    "huggingface_api_key": "your stuff here bros"
+    "openai_api_key": "some super secret shtuff here",
+    "huggingface_api_key": "some super secret shtuff here",
+    "bing_api_key": "some super secret shtuff here",
+    "bing_endpoint": "https://api.bing.microsoft.com/v7.0/search"
 }
