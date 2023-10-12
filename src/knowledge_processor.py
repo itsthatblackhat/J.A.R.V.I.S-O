@@ -1,62 +1,79 @@
-import json
-import random
+import sqlite3
+import numpy as np
+from typing import List
 
-# Load the knowledge base
-with open("config/knowledge_base.json", "r") as file:
-    KNOWLEDGE_BASE = json.load(file)
+DATABASE_NAME = 'data/jarviso.db'  # Updated SQLite database path
 
-USER_CONTEXT = {
-    'preferences': {},
-    'frequent_questions': {}
-}
+def initialize_database():
+    """Initialize the SQLite database and create the embeddings table if it doesn't exist."""
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
 
-CURIOUS_QUESTIONS = [
-    "What's your favorite movie?",
-    "I've noticed you often ask about XYZ. Would you like to know more about it?",
-    "How do you feel about artificial intelligence?",
-    "Can you tell me more about your interests?"
-]
+    # Create the embeddings table if it doesn't exist
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS embeddings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        text TEXT NOT NULL UNIQUE,
+        embedding TEXT NOT NULL
+    )
+    ''')
 
+    conn.commit()
+    conn.close()
 
-def get_answer_from_knowledge_base(query):
+def check_db_connection():
     """
-    Check if the query matches any predefined queries in the knowledge base and return the corresponding answer.
-    Additionally, update the context based on the user's questions.
-
-    Args:
-    - query (str): The user's query.
+    Checks if a connection to the database can be established.
 
     Returns:
-    - str or None: The corresponding answer from the knowledge base, or None if no match is found.
+    - True if the connection is successful; False otherwise.
     """
-    # Update user context
-    update_user_context(query)
+    try:
+        conn = sqlite3.connect(DATABASE_NAME)
+        conn.close()
+        return True
+    except sqlite3.Error:
+        return False
 
-    return KNOWLEDGE_BASE.get(query, None)
+def generate_embeddings(text: str) -> List[float]:
+    """Generate dummy embeddings for the provided text."""
+    return [len(text) * 0.1] * 300
 
+def store_embedding_in_db(text: str, embedding: List[float]):
+    """Store embeddings in the SQLite database."""
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
 
-def update_user_context(query):
-    """
-    Updates the user's context based on the questions they ask.
+    embedding_str = ','.join(map(str, embedding))
 
-    Args:
-    - query (str): The user's query.
-    """
-    if query in USER_CONTEXT['frequent_questions']:
-        USER_CONTEXT['frequent_questions'][query] += 1
+    try:
+        cursor.execute('INSERT OR REPLACE INTO embeddings (text, embedding) VALUES (?, ?)', (text, embedding_str))
+        conn.commit()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    finally:
+        conn.close()
+
+def retrieve_embedding_from_db(text: str) -> List[float]:
+    """Retrieve embeddings from the SQLite database based on text."""
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT embedding FROM embeddings WHERE text = ?', (text,))
+    embedding_str = cursor.fetchone()
+
+    conn.close()
+
+    if embedding_str:
+        return list(map(float, embedding_str[0].split(',')))
     else:
-        USER_CONTEXT['frequent_questions'][query] = 1
+        return []
 
+if __name__ == "__main__":
+    initialize_database()  # Initialize the database and create tables
 
-def get_curious_question():
-    """
-    Returns a question based on Jarviso's curiosity and what it has observed or wants to know.
-
-    Returns:
-    - str: A question.
-    """
-    # For simplicity, we'll use a random choice.
-    # In a more advanced scenario, logic could be added to select questions based on context.
-    return random.choice(CURIOUS_QUESTIONS)
-
-# You can add more functions or logic to further process or search through the knowledge base.
+    text_sample = "Hello Jarviso"
+    embedding_sample = generate_embeddings(text_sample)
+    store_embedding_in_db(text_sample, embedding_sample)
+    retrieved_embedding = retrieve_embedding_from_db(text_sample)
+    print(retrieved_embedding)

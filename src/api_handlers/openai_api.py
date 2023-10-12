@@ -1,23 +1,29 @@
 import requests
 import json
+from typing import Optional
 
-def call_openai_gpt_api(user_input, api_key):
-    API_ENDPOINT = "https://api.openai.com/v1/engines/davinci/completions"
-    HEADERS = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "User-Agent": "Jarviso"
-    }
-    DATA = {
-        "prompt": f"User: {user_input}\nJarviso:",
-        "max_tokens": 150,
-        "temperature": 0.6
-    }
+# Load API keys from the config file
+with open("config/api_keys.json", "r") as file:
+    API_KEYS = json.load(file)
 
+OPENAI_API_KEY = API_KEYS["openai_api_key"]
+OPENAI_ENDPOINT = "https://api.openai.com/v1/engines/davinci/completions"  # Modify this if you're using a different model or endpoint
+
+def call_openai_gpt_api(prompt: str) -> Optional[str]:
+    """Function to get a response from OpenAI's GPT-3 model."""
+    headers = {
+        "Authorization": f"Bearer {OPENAI_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "prompt": prompt,
+        "max_tokens": 150  # Limiting response length for demo purposes; you can adjust this
+    }
     try:
-        response = requests.post(API_ENDPOINT, headers=HEADERS, data=json.dumps(DATA))
-        response.raise_for_status()  # Raises an HTTPError if the HTTP request returned an unsuccessful status code
-        return response.json()["choices"][0]["text"].strip()
-    except requests.RequestException as e:
-        print(f"Error in API call: {e}")
-        return "Sorry, I couldn't process that request."
+        response = requests.post(OPENAI_ENDPOINT, headers=headers, json=data)
+        response.raise_for_status()
+        content = response.json()
+        return content.get('choices', [{}])[0].get('text', '').strip()
+    except Exception as e:
+        print(f"Error in call_openai_gpt_api: {e}")
+        return None

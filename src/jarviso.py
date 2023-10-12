@@ -1,93 +1,131 @@
+import sqlite3
+import json
+import os
+
 from src.api_handlers.openai_api import call_openai_gpt_api
 from src.feedback_processor import generate_embeddings
 from src.decision_maker import train_core_brain
 from src.active_learner import ActiveLearner
 from src.dialogue_manager import DialogueManager
-from utils.data_loader import load_data, save_data
+from src.context_manager import ContextManager
+from src.knowledge_processor import DATABASE_NAME
+from utils.data_loader import load_data, save_data, save_feedback_data, save_feedback_log, save_training_data
 from utils.model_loader import load_model, save_model
-import os
-import json
 
 # Load API keys from the config file
 with open("config/api_keys.json", "r") as file:
     API_KEYS = json.load(file)
 
 OPENAI_API_KEY = API_KEYS["openai_api_key"]
-BING_API_KEY = API_KEYS["bing_api_key"]
-BING_ENDPOINT = API_KEYS["bing_endpoint"]
+
+DB_PATH = os.path.join("data", "jarviso.db")
+
+def initialize_database():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    # Create tables if they don't exist
+    cursor.execute('''CREATE TABLE IF NOT EXISTS interactions
+                     (user_input TEXT, jarviso_response TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS feedback_data
+                     (user_input TEXT, jarviso_response TEXT, feedback TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS feedback_log
+                     (user_input TEXT, jarviso_response TEXT, feedback TEXT)''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS training_data
+                     (data BLOB)''')
+
+    conn.commit()
+    conn.close()
+
+def check_db_connection():
+    try:
+        conn = sqlite3.connect(DATABASE_NAME)
+        conn.close()
+        return True
+    except sqlite3.Error:
+        return False
+
+def save_to_db(table, data):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    if table == "interactions":
+        cursor.executemany("INSERT INTO interactions (user_input, jarviso_response) VALUES (?,?)", data)
+    elif table == "feedback_data":
+        cursor.executemany("INSERT INTO feedback_data (user_input, jarviso_response, feedback) VALUES (?,?,?)", data)
+    elif table == "feedback_log":
+        cursor.executemany("INSERT INTO feedback_log (user_input, jarviso_response, feedback) VALUES (?,?,?)", data)
+    elif table == "training_data":
+        cursor.executemany("INSERT INTO training_data (data) VALUES (?)", data)
+
+    conn.commit()
+    conn.close()
 
 def interact_with_user():
+    if not check_db_connection():
+        print("Error: Cannot establish a connection to the database. Exiting.")
+        return
+
+    initialize_database()
+
+    print("Starting interaction...")
+
     interactions = []
-    feedbacks = []
-    previous_user_input = ""
-    repeated_question_count = 0
-    data_filepath = os.path.join("data", "interactions.csv")
-    model_filepath = os.path.join("models", "jarviso_core_brain.h5")
+    feedback_data = []
+    feedback_log = []
 
     # Initialize Active Learner
     active_learner = ActiveLearner()
 
     # Load existing model if available
     local_model = None
+    model_filepath = os.path.join("models", "jarviso_core_brain.h5")
     if os.path.exists(model_filepath):
         local_model = load_model(model_filepath)
 
-    # Initialize Dialogue Manager with the local model
-    dialogue_manager = DialogueManager(bing_api_key=BING_API_KEY, bing_endpoint=BING_ENDPOINT, local_model=local_model)
+    # Initialize Context Manager
+    context_manager = ContextManager(max_length=5)
+
+    # Initialize Dialogue Manager with the local model and context_manager
+    dialogue_manager = DialogueManager(local_model=local_model, context_manager=context_manager)
 
     # Load existing data if available
-    if os.path.exists(data_filepath):
-        df = load_data(data_filepath)
-        interactions.extend(df.values.tolist())
+    if os.path.exists(DB_PATH):
+        conn = sqlite3.connect(DB_PATH)
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM interactions")
+        interactions.extend(cur.fetchall())
+        conn.close()
 
     while True:
         user_input = input("User: ")
 
-        # Check for repeated questions
-        if user_input == previous_user_input:
-            repeated_question_count += 1
-        else:
-            repeated_question_count = 0
-        previous_user_input = user_input
+        # Get response from Dialogue Manager
+        gpt_response, is_from_local_model = dialogue_manager.respond(user_input)
+        if not is_from_local_model:
+            gpt_response = call_openai_gpt_api(user_input)
 
-        # Handle repeated questions
-        if repeated_question_count > 2:
-            gpt_response = "It seems you're asking about the same topic. Unfortunately, my answer remains the same. Would you like to ask about something else?"
-        else:
-            # Get response from Dialogue Manager
-            gpt_response = dialogue_manager.respond(user_input)
+        # Update context
+        context_manager.update_context(user_input=user_input, bot_response=gpt_response)
 
         # Ask for feedback
         feedback = input(f"Jarviso: {gpt_response}\nFeedback (good/bad): ").lower()
-        feedbacks.append(feedback)
+        feedback_data.append((user_input, gpt_response, feedback))
 
-        # Log the interaction
-        interactions.append([user_input, gpt_response, feedback])
+        # After receiving feedback
+        embeddings = generate_embeddings([user_input])
+        decisions = [1 if feedback == "good" else 0]
+        local_model = train_core_brain(embeddings, decisions)
+        dialogue_manager.local_model = local_model  # Update the model in dialogue manager
 
-        # If the feedback indicates the response was unsatisfactory, add it to the active learner's unlabeled data
-        if feedback == "bad":
-            active_learner.add_unlabeled_data((user_input, gpt_response))
+        # Save interactions for each loop
+        interactions.append((user_input, gpt_response))
+        save_to_db("interactions", interactions)
 
-        # Every 10 interactions, query the user for feedback on a specific uncertain interaction
-        if len(interactions) % 10 == 0:
-            uncertain_interaction = active_learner.get_data_for_labeling()
-            if uncertain_interaction:
-                print(f"We're uncertain about this interaction: User: {uncertain_interaction[0]} Jarviso: {uncertain_interaction[1]}")
-                feedback_for_uncertain = input("Feedback (good/bad): ").lower()
-                active_learner.receive_label(uncertain_interaction, feedback_for_uncertain)
+        # Exit conditions
+        if user_input.lower() in ["exit", "end", "quit"]:
+            print("Thank you for interacting with Jarviso. Have a great day!")
+            break
 
-                # Update interactions and feedback lists
-                interactions.append(list(uncertain_interaction))
-                feedbacks.append(feedback_for_uncertain)
-
-            # Training decision maker
-            embeddings = generate_embeddings([i[0] for i in interactions[-10:]])  # Last 10 user inputs
-            decisions = [1 if f == "good" else 0 for f in feedbacks[-10:]]  # Last 10 feedbacks
-            local_model = train_core_brain(embeddings, decisions)
-            dialogue_manager.local_model = local_model  # Update the model in dialogue manager
-
-            # Save the updated model
-            save_model(local_model, model_filepath)
-
-        # Save interactions to file for future reference
-        save_data(interactions, data_filepath)
+if __name__ == "__main__":
+    interact_with_user()

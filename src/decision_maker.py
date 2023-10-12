@@ -1,46 +1,76 @@
-import tensorflow as tf
+import sqlite3
 import numpy as np
-from keras.models import Sequential
-from keras.layers import Dense
 
-def build_model(input_dim):
-    """Build a basic neural network model."""
-    model = Sequential()
-    model.add(Dense(16, input_dim=input_dim, activation='relu'))
-    model.add(Dense(8, activation='relu'))
-    model.add(Dense(1, activation='sigmoid'))  # Binary classification
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    return model
+DATABASE_NAME = "jarviso.db"
+
+
+def create_tables(conn):
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS training_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            embedding BLOB,
+            decision INTEGER
+        )
+    ''')
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS model_parameters (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            parameters BLOB
+        )
+    ''')
+    conn.commit()
+
+
+def save_training_data(conn, embeddings, decisions):
+    c = conn.cursor()
+    for embedding, decision in zip(embeddings, decisions):
+        c.execute('''
+            INSERT INTO training_data (embedding, decision)
+            VALUES (?, ?)
+        ''', (embedding.tobytes(), decision))
+    conn.commit()
+
+
+def load_training_data(conn):
+    c = conn.cursor()
+    c.execute('SELECT embedding, decision FROM training_data')
+    rows = c.fetchall()
+    embeddings = [np.frombuffer(row[0], dtype=np.float32) for row in rows]
+    decisions = [row[1] for row in rows]
+    return embeddings, decisions
 
 
 def train_core_brain(embeddings, decisions):
-    """Train the core decision-making brain of Jarviso."""
-    # Assuming embeddings is a list of embeddings and decisions is a list of 0s and 1s (0 for bad, 1 for good)
-    if not embeddings or not decisions:
-        return None
+    # Dummy training logic
+    # Replace this with your training code
+    model = "dummy_model"
 
-    input_dim = len(embeddings[0])  # Get the size of an embedding
-    model = build_model(input_dim)
-
-    # Convert data to numpy arrays for training
-    X = np.array(embeddings)
-    y = np.array(decisions)
-
-    model.fit(X, y, epochs=10, batch_size=1)
-
+    # Store the model parameters in the SQLite database
+    save_model_parameters(conn, model)
     return model
 
-def predict_decision(model, embedded_input):
-    """
-    Predict the decision based on the embedded input.
 
-    Args:
-    - model: Trained TensorFlow/Keras model.
-    - embedded_input: Numpy array of input embeddings.
+def save_model_parameters(conn, model):
+    # Convert your model into a storable format
+    # Here, I'm assuming a dummy model which is a string
+    model_blob = model.encode('utf-8')
+    c = conn.cursor()
+    c.execute('''
+        INSERT INTO model_parameters (parameters)
+        VALUES (?)
+    ''', (model_blob,))
+    conn.commit()
 
-    Returns:
-    - predicted_class: Predicted class label.
-    """
-    embedded_input = np.array(embedded_input).reshape(1, -1)  # Reshaping to ensure it's 2D
-    predicted_class = np.argmax(model.predict(embedded_input), axis=-1)
-    return predicted_class[0]
+
+def load_model_parameters(conn):
+    c = conn.cursor()
+    c.execute('SELECT parameters FROM model_parameters ORDER BY id DESC LIMIT 1')
+    model_blob = c.fetchone()[0]
+    model = model_blob.decode('utf-8')
+    return model
+
+
+# Establish SQLite connection and create tables
+conn = sqlite3.connect(DATABASE_NAME)
+create_tables(conn)

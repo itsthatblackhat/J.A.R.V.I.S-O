@@ -1,31 +1,60 @@
-from src.embedding import convert_text_to_embedding
+import sqlite3
+from typing import List
 import numpy as np
+from src.embedding import get_sentence_embedding
+
+DATABASE_NAME = "JarvisoDB.sqlite"
 
 
-def generate_embeddings(interactions):
+def generate_embeddings(sentences: List[str]) -> np.array:
     """
-    Given a list of interactions (questions and responses), generate embeddings for each interaction using BERT.
-    Returns a numpy array of embeddings.
+    Generate embeddings for a list of sentences using the defined embedding method.
+    Args:
+    - sentences: List of sentences for which embeddings are required.
+
+    Returns:
+    - embeddings: A numpy array containing the embeddings.
     """
-    embeddings = []
 
-    for interaction in interactions:
-        # Ensure interaction is a valid tuple or list before processing
-        if not isinstance(interaction, (tuple, list)):
-            print(f"Invalid interaction format: {interaction}")
-            continue
-
-        # For the purpose of this example, we're just embedding the user input.
-        # Depending on the use case, you might want to embed the response or both.
-        text = interaction[0]
-
-        # Get BERT embeddings for the text using the refactored function
-        embedding = convert_text_to_embedding(text)
-
-        if embedding is not None:
-            embeddings.append(embedding)
-        else:
-            # Handle failed embeddings (e.g., by using a zero vector or skipping)
-            embeddings.append(np.zeros((768,)))
-
+    embeddings = [get_sentence_embedding(sentence) for sentence in sentences]
     return np.array(embeddings)
+
+
+def save_feedback_data_to_db(feedback_data: List[tuple]):
+    """
+    Save feedback data to SQLite database.
+    Args:
+    - feedback_data: List of feedback data tuples.
+    """
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    for data in feedback_data:
+        cursor.execute('''
+        INSERT INTO feedback_data (user_input, jarviso_response, feedback)
+        VALUES (?, ?, ?)
+        ''', (data[0], data[1], data[2]))
+
+    conn.commit()
+    conn.close()
+
+
+def get_feedback_data_from_db() -> List[tuple]:
+    """
+    Retrieve feedback data from SQLite database.
+
+    Returns:
+    - feedback_data: List of feedback data tuples.
+    """
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM feedback_data')
+    feedback_data = cursor.fetchall()
+
+    conn.close()
+    return feedback_data
+
+# ... Any other required functions ...

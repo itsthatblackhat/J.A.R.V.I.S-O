@@ -1,27 +1,19 @@
-import requests
-import json
+from typing import Optional
+from .openai_api import call_openai_gpt_api
+from .bing_search import bing_search
+from .huggingface_api import call_huggingface_api
 
-def call_bing_search_api(query, api_key, endpoint):
-
-    headers = {
-        "Ocp-Apim-Subscription-Key": api_key
-    }
-
-    params = {
-        "q": query,
-        "count": 1,  # We want only the most relevant result
-        "offset": 0,
-        "mkt": "en-US",
-        "safesearch": "Strict"
-    }
-
-    full_url = f"{endpoint}?q={query}&count=1&offset=0&mkt=en-US&safesearch=Strict"
-    print(f"Constructed URL: {full_url}")
-
-    response = requests.get(endpoint, headers=headers, params=params)
-    response.raise_for_status()
-
-    search_results = response.json()
-    snippet = search_results["webPages"]["value"][0]["snippet"]  # Extracting the snippet from the most relevant result
-
-    return snippet
+def search_query(query: str, api_type: str = "openai") -> Optional[str]:
+    """
+    Search for a query using a specific API type.
+    Supported API types: "openai", "bing", "huggingface"
+    """
+    if api_type == "openai":
+        return call_openai_gpt_api(query)
+    elif api_type == "bing":
+        return bing_search(query)
+    elif api_type == "huggingface":
+        return call_huggingface_api(query)
+    else:
+        print(f"Unsupported API type: {api_type}")
+        return None
