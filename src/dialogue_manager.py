@@ -1,8 +1,11 @@
+import numpy as np
+import json
+import random
+
 from src.api_handlers.openai_api import call_openai_gpt_api
 from src.feedback_processor import generate_embeddings
 from src.knowledge_helpers import get_answer_from_knowledge_base, google_search
-import json
-import random
+from src.decision_maker import train_core_brain, load_model_parameters
 
 # Load API keys directly from the config file
 with open("config/api_keys.json", "r") as file:
@@ -41,7 +44,7 @@ class DialogueManager:
             return kb_response, False
 
         # 2. Local Neural Network
-        context = ' '.join([item[1] for item in self.context_manager.get_context()])
+        context = ' '.join([str(item[1]) for item in self.context_manager.get_context()])
         local_nn_response = self.local_neural_network_predict(user_input, context)
         if local_nn_response:
             self.context_manager.update_context(user_input, local_nn_response)
@@ -69,23 +72,19 @@ class DialogueManager:
         return generic_resp, False
 
     def local_neural_network_predict(self, user_input, context):
-        if not self.local_model:
-            return None
+        # Generate embedding for the input
+        input_embedding = generate_embeddings(user_input)  # assuming this function returns a numpy array
 
-        # Combine user input with context for embeddings
-        combined_input = context + " " + user_input
+        # Since the input embedding might be a sequence, we should flatten it
+        input_embedding = np.reshape(input_embedding, (-1, 512))
 
-        # Convert combined input to embeddings
-        input_embeddings = generate_embeddings([combined_input])
+        # Predict
+        predicted_prob = self.local_model.predict(input_embedding)[0][0]
 
-        # Feed embeddings to the local model
-        predicted_class = self.local_model.predict(input_embeddings)
+        # Convert probability to class (0 or 1)
+        predicted_class = 1 if predicted_prob > 0.5 else 0
 
-        # Interpret the output
-        if predicted_class == 1:
-            return "Satisfactory response based on past interactions"  # Placeholder, adjust as needed
-        else:
-            return None
+        return predicted_class
 
     def generic_response(self, user_input):
         return "I'm sorry, I don't know the answer to that."

@@ -20,6 +20,7 @@ OPENAI_API_KEY = API_KEYS["openai_api_key"]
 
 DB_PATH = os.path.join("data", "jarviso.db")
 
+
 def initialize_database():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -37,6 +38,7 @@ def initialize_database():
     conn.commit()
     conn.close()
 
+
 def check_db_connection():
     try:
         conn = sqlite3.connect(DATABASE_NAME)
@@ -44,6 +46,7 @@ def check_db_connection():
         return True
     except sqlite3.Error:
         return False
+
 
 def save_to_db(table, data):
     conn = sqlite3.connect(DB_PATH)
@@ -60,6 +63,7 @@ def save_to_db(table, data):
 
     conn.commit()
     conn.close()
+
 
 def interact_with_user():
     if not check_db_connection():
@@ -80,30 +84,48 @@ def interact_with_user():
     # Load existing model if available
     local_model = None
     model_filepath = os.path.join("models", "jarviso_core_brain.h5")
+
     if os.path.exists(model_filepath):
         local_model = load_model(model_filepath)
+    else:
+        # If the model file does not exist but we have some initial data
+        # Load the initial data
+        user_inputs = [...]  # Load your list of user inputs
+        bot_responses = [...]  # Load corresponding list of bot responses
+        feedbacks = [...]  # Load corresponding list of feedbacks ("good" or "bad")
 
-    # Initialize Context Manager
+        if user_inputs and bot_responses and feedbacks:  # Check if data lists are populated
+            # Generate embeddings
+            embeddings = generate_embeddings(user_inputs)
+            # Convert feedback to binary labels
+            decisions = [1 if feedback == "good" else 0 for feedback in feedbacks]
+            # Train and save the model
+            local_model = train_core_brain(embeddings, decisions)
+
+    # Check again if we have a model
+    if not local_model:
+        print("Error: No local model available for prediction!")
+        return
+
+    # Initialize Context Manager and load previous context from DB
     context_manager = ContextManager(max_length=5)
+    context_manager.retrieve_context_from_db()
 
     # Initialize Dialogue Manager with the local model and context_manager
     dialogue_manager = DialogueManager(local_model=local_model, context_manager=context_manager)
-
-    # Load existing data if available
-    if os.path.exists(DB_PATH):
-        conn = sqlite3.connect(DB_PATH)
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM interactions")
-        interactions.extend(cur.fetchall())
-        conn.close()
 
     while True:
         user_input = input("User: ")
 
         # Get response from Dialogue Manager
         gpt_response, is_from_local_model = dialogue_manager.respond(user_input)
-        if not is_from_local_model:
-            gpt_response = call_openai_gpt_api(user_input)
+
+        # If response is not from local model and OpenAI API is accessible
+        if not is_from_local_model and OPENAI_API_KEY:
+            try:
+                gpt_response = call_openai_gpt_api(user_input)
+            except Exception as e:
+                print(f"Error calling OpenAI API: {e}")
 
         # Update context
         context_manager.update_context(user_input=user_input, bot_response=gpt_response)
@@ -126,6 +148,7 @@ def interact_with_user():
         if user_input.lower() in ["exit", "end", "quit"]:
             print("Thank you for interacting with Jarviso. Have a great day!")
             break
+
 
 if __name__ == "__main__":
     interact_with_user()

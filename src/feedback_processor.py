@@ -1,10 +1,9 @@
 import sqlite3
-from typing import List
+from typing import List, Tuple
 import numpy as np
 from src.embedding import get_sentence_embedding
 
-DATABASE_NAME = "JarvisoDB.sqlite"
-
+DATABASE_NAME = "data/jarviso.db"
 
 def generate_embeddings(sentences: List[str]) -> np.array:
     """
@@ -19,8 +18,7 @@ def generate_embeddings(sentences: List[str]) -> np.array:
     embeddings = [get_sentence_embedding(sentence) for sentence in sentences]
     return np.array(embeddings)
 
-
-def save_feedback_data_to_db(feedback_data: List[tuple]):
+def save_feedback_data_to_db(feedback_data: List[Tuple[str, str, str]]):
     """
     Save feedback data to SQLite database.
     Args:
@@ -39,8 +37,7 @@ def save_feedback_data_to_db(feedback_data: List[tuple]):
     conn.commit()
     conn.close()
 
-
-def get_feedback_data_from_db() -> List[tuple]:
+def get_feedback_data_from_db() -> List[Tuple[str, str, str]]:
     """
     Retrieve feedback data from SQLite database.
 
@@ -51,7 +48,7 @@ def get_feedback_data_from_db() -> List[tuple]:
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM feedback_data')
+    cursor.execute('SELECT user_input, jarviso_response, feedback FROM feedback_data')
     feedback_data = cursor.fetchall()
 
     conn.close()

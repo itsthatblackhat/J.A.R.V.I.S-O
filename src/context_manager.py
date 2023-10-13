@@ -21,27 +21,30 @@ class ContextManager:
         self.conn.commit()
 
     def update_context(self, user_input, bot_response):
-        # Update in-memory list
-        if len(self.context) >= self.max_length:
-            self.context.pop(0)
-        self.context.append((user_input, bot_response))
+        # Ensure neither user_input nor bot_response are None before proceeding
+        if user_input and bot_response:
+            # Update in-memory list
+            if len(self.context) >= self.max_length:
+                self.context.pop(0)
+            self.context.append((user_input, bot_response))
 
-        # Update database
-        c = self.conn.cursor()
-        c.execute('''
-            INSERT INTO conversation_context (user_input, bot_response)
-            VALUES (?, ?)
-        ''', (user_input, bot_response))
-        self.conn.commit()
+            # Update database
+            c = self.conn.cursor()
+            c.execute('''
+                INSERT INTO conversation_context (user_input, bot_response)
+                VALUES (?, ?)
+            ''', (user_input, bot_response))
+            self.conn.commit()
 
     def get_context(self):
-        return self.context
+        # Filter out any None values
+        return [item for item in self.context if item[0] and item[1]]
 
     def retrieve_context_from_db(self):
         c = self.conn.cursor()
         c.execute('SELECT user_input, bot_response FROM conversation_context ORDER BY id DESC LIMIT ?', (self.max_length,))
         rows = c.fetchall()
-        self.context = [tuple(row) for row in rows]
+        self.context = [tuple(row) for row in rows if row[0] and row[1]]  # filtering out None
 
     def clear_context(self):
         self.context = []
