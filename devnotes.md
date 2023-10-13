@@ -1,118 +1,117 @@
-# Jarviso Development Notes - In-Depth
+# Jarviso Development Notes - Ultra Comprehensive
 
 ## Introduction
-Jarviso is designed to serve as a sophisticated dialogue system, integrating several techniques and services.
+
+Jarviso is a project that emulates capabilities similar to JARVIS, branded as "JARVISO" (Jarvis - Official). It integrates a neural network, multiple API services, and an SQLite database to construct a dialogue system.
 
 ---
 
-## Structure Overview
+## Main Structure
 
-1. **Main Files**:
-    - `main.py`: The entry point of the application.
-    - `jarviso.py`: Houses the primary logic for interacting with the user.
-    - `dialogue_manager.py`: Decides the best approach for generating a response.
-  
-2. **Helper Directories**:
-    - `api_handlers`: Contains utilities for external APIs.
-    - `knowledge_helpers`: Manages the internal knowledge base and web searching.
-    - `model`: Contains the neural network model for decision making.
-    - `src`: The primary source directory.
+### 1. **Main Modules**:
 
----
+   - **`main.py`**:
+     - **Purpose**: The entry point of Jarviso.
+     - **Main Function**: `interact_with_user()`: Engages the primary user interaction loop.
+   
+   - **`jarviso.py`**:
+     - **Purpose**: Handles interactions and defines user commands.
+     - **Main Function**: `interact_with_user()`: Orchestrates interaction deciding between different response sources.
 
-## Detailed Breakdown
+   - **`dialogue_manager.py`**:
+     - **Attributes**:
+       - `recent_questions`: Retains recent user queries.
+       - `local_model`: Instance of the neural network.
+       - `context_manager`: Manages conversation context.
+     - **Key Methods**:
+       - `respond()`: Determines best response source.
+       - `local_neural_network_predict()`: Uses the neural network for predictions.
+       - `generic_response()`: Generic answers for failed methods.
+   
+   - **`context_manager.py`**:
+     - **Attributes**:
+       - `context`: Retains conversation history.
+       - `max_context_length`: Maximum stored interactions.
+     - **Key Methods**:
+       - `update_context()`: Updates conversation history.
+       - `get_context()`: Retrieves current context.
 
-### `main.py`
+### 2. **Subdirectories**:
 
-- **Functions**:
-    - `interact_with_user()`: Main loop for user interaction. Handles errors and gracefully terminates the program.
+   - **`api_handlers`**: Interfaces with external services.
+     - **`openai_api.py`**:
+       - **Function**: `call_openai_gpt_api()`: Interfaces with the OpenAI GPT API for generating responses.
 
-### `jarviso.py`
+   - **`knowledge_helpers`**: Houses internal knowledge base and web search utilities.
+     - **Functions**:
+       - `get_answer_from_knowledge_base()`: Matches queries with predefined answers.
+       - `google_search()`: Utilizes Selenium to search the web for answers.
 
-- **Functions**:
-    - `interact_with_user()`: Orchestrates the interaction process, deciding between various response mechanisms.
+   - **`model`**: Contains neural network models and related utilities.
+     - **`core_brain.py`**:
+       - **Class `CoreBrain`**:
+         - **Attributes**:
+           - `model`: The TensorFlow model instance.
+         - **Methods**:
+           - `train()`: Refines the model.
+           - `predict()`: Generates a prediction.
+           - `save()`: Saves model's parameters.
+           - `load()`: Loads a saved model.
+   
+   - **`src`**: Core source code and utilities.
+     - **`feedback_processor.py`**: Manages user feedback.
+       - **Function**: `generate_embeddings()`: Converts text input into numerical embeddings.
 
-### `dialogue_manager.py`
-
-- **Attributes**:
-    - `recent_questions`: Keeps track of the recent questions asked to avoid redundancy.
-    - `local_model`: The neural network model instance.
-    - `context_manager`: Instance of `ContextManager` to manage the conversation context.
-
-- **Methods**:
-    - `respond()`: Determines how to respond based on user input.
-    - `local_neural_network_predict()`: Uses the local neural network to generate a prediction.
-    - `generic_response()`: Provides a default response when no other methods succeed.
-
-### `context_manager.py`
-
-- **Attributes**:
-    - `context`: A deque that stores the conversation history.
-    - `max_context_length`: Maximum number of interactions to remember.
-
-- **Methods**:
-    - `update_context()`: Adds a new user-system interaction to the context.
-    - `get_context()`: Retrieves the current context.
-
-### `decision_maker.py`
-
-- **Functions**:
-    - `train_core_brain()`: Trains the neural network with new feedback.
-    - `load_model_parameters()`: Loads an existing neural network model.
-
-### `api_handlers/openai_api.py`
-
-- **Functions**:
-    - `call_openai_gpt_api()`: Sends a request to the OpenAI GPT API.
-
-### `knowledge_helpers`
-
-- **Functions**:
-    - `get_answer_from_knowledge_base()`: Checks if the user's query matches any predefined responses.
-    - `google_search()`: Searches the web for answers using Selenium.
-
-### `model/core_brain.py`
-
-- **Classes**:
-    - `CoreBrain`: Represents the neural network model.
-        - **Attributes**: 
-            - `model`: TensorFlow neural network model.
-        - **Methods**: 
-            - `train()`: Trains the model using embeddings and decisions.
-            - `predict()`: Makes a prediction based on input embeddings.
-            - `save()`: Saves the model parameters.
-            - `load()`: Loads saved model parameters.
+     - **`decision_maker.py`**: Manages neural network training and model parameters.
+       - **Functions**:
+         - `train_core_brain()`: Orchestrates the training process.
+         - `load_model_parameters()`: Retrieves saved model parameters.
 
 ---
 
 ## Neural Network Overview
 
-- **Model Architecture**: 
-    - Input Layer: Accepts embeddings.
-    - Dense Layers: Process the embeddings.
-    - Output Layer: Binary classification.
+Jarviso's neural network (`CoreBrain`) is a binary classifier that predicts if a query should be answered using local knowledge or escalated to a more complex mechanism.
 
-- **Training Process**: Embeddings and decisions are used to fine-tune the model. 
+- **Architecture**:
+  - **Input Layer**: Accepts embeddings.
+  - **Dense Layers**: Process data.
+  - **Output Layer**: Returns 0 or 1.
 
----
-
-## Database
-
-- We are utilizing SQLite for local storage.
-- The database is designed to store user interactions, feedback, and other important data.
-- Various components of the system will query or update the database as necessary.
+- **Training**:
+  - **Embeddings**: Represent user queries.
+  - **Decisions**: Represent correct answers.
 
 ---
 
-## Interdependencies
+## SQLite Database
 
-- `jarviso.py` relies heavily on `dialogue_manager.py` to generate responses.
-- `dialogue_manager.py` accesses:
-    - Local neural network (`model/core_brain.py`)
-    - External APIs (`api_handlers`)
-    - Knowledge base (`knowledge_helpers`)
-- `context_manager.py` is used across the system to maintain context.
+- **Purpose**: Offers lightweight, local storage.
+- **Usage**: Retains user interactions, feedback, and critical system data.
+- **Interactions**: Many modules/functions read/write to this database.
 
 ---
 
-This note aims to provide an exhaustive breakdown of Jarviso's project structure, detailing its functionalities, methodologies, and interdependencies. The project integrates local knowledge, neural networks, external APIs, and user feedback to offer an advanced dialogue system.
+## Interdependencies and Flow
+
+1. **`main.py`**:
+   - Engages `interact_with_user()` from `jarviso.py`.
+
+2. **`jarviso.py`**:
+   - Relies on `dialogue_manager.py` for generating responses.
+   - Uses `context_manager.py` to fetch/update conversation history.
+
+3. **`dialogue_manager.py`**:
+   - Utilizes `model/core_brain.py` for local neural network predictions.
+   - Engages `api_handlers` to get responses from external sources.
+   - Leverages `knowledge_helpers` for internal knowledge checks and web searches.
+
+4. **`context_manager.py`**:
+   - Provides context for relevant responses.
+   - Influences other modules by offering historical data.
+
+---
+
+## Conclusion
+
+This document offers an in-depth architectural overview of Jarviso, capturing the essence and intricacies of every module, directory, and function. It should serve as a crucial reference for all developers and contributors.
