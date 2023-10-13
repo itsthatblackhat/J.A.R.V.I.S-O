@@ -5,7 +5,7 @@ import sys
 from src.browser_app import BrowserApp
 from src.api_handlers.openai_api import call_openai_gpt_api
 from src.feedback_processor import generate_embeddings
-from src.decision_maker import train_core_brain
+from src.decision_maker import train_core_brain, periodically_train_model
 from src.active_learner import ActiveLearner
 from src.dialogue_manager import DialogueManager
 from src.context_manager import ContextManager
@@ -24,16 +24,16 @@ DB_PATH = os.path.join("data", "jarviso.db")
 # Automated conversation to train Jarviso
 def automated_training(jarviso_instance):
     training_phrases = [
-        "Tell me a joke.",
-        "What's the weather like?",
-        "How does machine learning work?",
-        "What's the difference between AI and ML?",
-        "Can you explain deep learning?",
-        "How do neural networks function?",
-        "What are the applications of AI?",
-        "Describe the Turing test.",
-        "Explain supervised learning.",
-        "What is reinforcement learning?"
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn grammar and how to speak and have conversation",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about math",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about science",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about programming",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about geography",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about advanced mathematics",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about politics",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about machine learning",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about humans",
+        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about anything"
     ]
 
     print("Initiating automated training conversation...")
@@ -45,6 +45,7 @@ def automated_training(jarviso_instance):
 
 class Jarviso:
     def __init__(self):
+        self.interaction_count = 0
         # Initialize the OpenAI API key
         with open("config/api_keys.json", "r") as file:
             self.OPENAI_API_KEY = json.load(file).get("openai_api_key", "")
@@ -101,19 +102,28 @@ class Jarviso:
         save_model(self.local_model, self.model_filepath)
 
     def respond(self, user_input):
-        # Use Dialogue Manager to get response
-        gpt_response, is_from_local_model = self.dialogue_manager.respond(user_input)
+        self.interaction_count += 1
 
-        # If response is not from local model and OpenAI API is accessible
-        if not is_from_local_model and self.OPENAI_API_KEY:
+        # If user input is empty
+        if not user_input.strip():
+            return "I didn't catch that. Please say something!"
+
+        # Use Dialogue Manager to get response
+        gpt_response, is_from_local_model, confidence = self.dialogue_manager.respond(user_input)
+
+        # If the confidence is below a certain threshold, fall back to GPT's response
+        if confidence < 0.5:
             try:
                 gpt_response = call_openai_gpt_api(user_input)
             except Exception as e:
                 print(f"Error calling OpenAI API: {e}")
                 gpt_response = "Sorry, I couldn't process that request."
 
-        return gpt_response
+        # Periodically train the model
+        if self.interaction_count % 10 == 0:
+            periodically_train_model()
 
+        return gpt_response
 
 def initialize_database():
     conn = sqlite3.connect(DB_PATH)
@@ -162,13 +172,19 @@ def interact_with_user():
     print("Starting interaction...")
 
     while True:
-        user_input = input("User: ")
+        user_input = input("User: ").strip()
+        if not user_input:
+            print("Jarviso: I didn't catch that. Please say something!")
+            continue
+
         if user_input.lower() in ["exit", "end", "quit"]:
             print("Thank you for interacting with Jarviso. Have a great day!")
             break
         jarviso_response = jarviso_instance.respond(user_input)
         print(f"Jarviso: {jarviso_response}")
         feedback = input("Feedback (good/bad): ").lower()
+        # You can store feedback and interactions here as needed
+        # Rest of your interact_with_user logic can be added here...
 
 
 if __name__ == "__main__":

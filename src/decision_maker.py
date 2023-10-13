@@ -6,10 +6,13 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from keras import Sequential
-from keras.layers import Dense
+from keras.layers import Dense, LSTM, RepeatVector, TimeDistributed
 import io
 
 DATABASE_NAME = "jarviso.db"
+INTERACTION_THRESHOLD = 100  # Number of interactions before retraining
+
+interaction_counter = 0  # To keep track of the number of interactions
 
 
 def create_tables(conn):
@@ -52,20 +55,9 @@ def load_training_data(conn):
 def train_core_brain(embeddings, decisions):
     embeddings = np.array(embeddings)
     decisions = np.array(decisions)
-
-    print(f"Embeddings shape: {embeddings.shape}")
-    print(f"Decisions shape: {decisions.shape}")
-    print(f"Sample embeddings: {embeddings[:5]}")  # print first 5 embeddings
-    print(f"Sample decisions: {decisions[:5]}")  # print first 5 decisions
-
     model = build_model(embeddings.shape[1])
-
-    # Train the model without validation_split
     model.fit(embeddings, decisions, epochs=10)
-
-    # Save the model parameters to the SQLite database
     save_model_parameters(conn, model)
-
     return model
 
 
@@ -77,7 +69,6 @@ def build_model(input_dim):
         keras.layers.Dropout(0.2),
         keras.layers.Dense(1, activation='sigmoid')
     ])
-
     model.compile(optimizer='adam',
                   loss='binary_crossentropy',
                   metrics=['accuracy'])
@@ -115,6 +106,41 @@ def load_model_parameters(conn):
     os.remove(temp_filename)
 
     return model
+
+
+def periodically_train_model():
+    global interaction_counter
+    interaction_counter += 1
+    if interaction_counter >= INTERACTION_THRESHOLD:
+        embeddings, decisions = load_training_data(conn)
+        if len(embeddings) > 0:  # Only train if there's new data
+            train_core_brain(embeddings, decisions)
+            interaction_counter = 0  # Reset counter
+
+
+def build_seq2seq_model(input_dim):
+    model = Sequential()
+    model.add(LSTM(128, activation='relu', input_shape=(input_dim, 1)))
+    model.add(RepeatVector(3))  # Assuming a fixed output sequence length of 3 for demonstration
+    model.add(LSTM(128, activation='relu', return_sequences=True))
+    model.add(TimeDistributed(Dense(1)))
+    model.compile(optimizer='adam', loss='mse')  # Using Mean Squared Error for simplicity
+    return model
+
+
+def train_seq2seq_model():
+    # Placeholder function. The training logic for the seq2seq model would go here.
+    # You would need a suitable dataset, split into input sequences and target sequences.
+    pass
+
+
+def update_model():
+    # Load the most recent training data
+    embeddings, decisions = load_training_data(conn)
+
+    # Train the core brain with the new data
+    if len(embeddings) > 0:  # Only train if there's new data
+        train_core_brain(embeddings, decisions)
 
 
 # Establish SQLite connection and create tables

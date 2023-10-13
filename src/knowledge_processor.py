@@ -21,7 +21,7 @@ def initialize_database():
     conn.commit()
     conn.close()
 
-def check_db_connection():
+def check_db_connection() -> bool:
     """
     Checks if a connection to the database can be established.
 

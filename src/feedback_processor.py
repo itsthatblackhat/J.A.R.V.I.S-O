@@ -54,4 +54,38 @@ def get_feedback_data_from_db() -> List[Tuple[str, str, str]]:
     conn.close()
     return feedback_data
 
-# ... Any other required functions ...
+def save_training_data_to_db(training_data: List[Tuple[str, str]]):
+    """
+    Save training data (questions and GPT responses) to SQLite database.
+    Args:
+    - training_data: List of training data tuples.
+    """
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    for data in training_data:
+        cursor.execute('''
+        INSERT INTO training_data (user_input, gpt_response)
+        VALUES (?, ?)
+        ''', (data[0], data[1]))
+
+    conn.commit()
+    conn.close()
+
+def get_training_data_from_db() -> List[Tuple[str, str]]:
+    """
+    Retrieve training data (questions and GPT responses) from SQLite database.
+
+    Returns:
+    - training_data: List of training data tuples.
+    """
+
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT user_input, gpt_response FROM training_data')
+    training_data = cursor.fetchall()
+
+    conn.close()
+    return training_data

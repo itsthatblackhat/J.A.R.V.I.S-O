@@ -18,60 +18,58 @@ class DialogueManager:
         self.context_manager = context_manager
         self.local_model = local_model
         self.recent_questions = []
+        self.training_data = []  # To store data for training
+
+    def store_training_data(self, user_input, gpt_response):
+        self.training_data.append((user_input, gpt_response))
 
     def respond(self, user_input):
-        # Check if question is repeated
-        if user_input in self.recent_questions:
-            return "It seems you've asked this before. Can I assist you with another query?", False
+        """
+        Generate a response using knowledge base, local neural network, or GPT-3.
 
-        # Update recent questions
-        self.recent_questions.append(user_input)
-        if len(self.recent_questions) > 5:  # Storing only last 5 questions for simplicity
-            self.recent_questions.pop(0)
+        Args:
+        - user_input: The user's input string.
 
-        # Commands recognition
-        if user_input.lower() in ["exit", "end", "quit"]:
-            return "Goodbye! Have a great day!", False
+        Returns:
+        - response: The generated response.
+        - is_from_local_model: Boolean indicating if the response is from the local model.
+        - confidence: A confidence score associated with the response. (1.0 for local model, 0.0 for GPT-3 for now)
+        """
 
-        # Implementing curiosity feature with improved conditions
-        if random.random() < 0.1 and "?" in user_input:  # 10% chance and if user input contains a '?'
-            return "I'm curious! Can you tell me more about that?", False
-
-        # 1. Check Knowledge Base
+        # First, try to fetch a response from the knowledge base
         kb_response = get_answer_from_knowledge_base(user_input, self.context_manager.get_context())
+
         if kb_response:
             self.context_manager.update_context(user_input, kb_response)
-            return kb_response, False
+            return kb_response, False, 0.0  # Return response, is_from_local_model = False, confidence = 0.0
 
-        # 2. Local Neural Network
-        context = ' '.join([str(item[1]) for item in self.context_manager.get_context()])
-        local_nn_response = self.local_neural_network_predict(user_input, context)
-        if local_nn_response:
+        # If not found in the knowledge base, try the local neural network
+        embedding = generate_embeddings([user_input])
+        prediction = self.local_model.predict(embedding)
+
+        # For now, let's assume a prediction close to 1 means we trust the local model's response.
+        # This threshold can be adjusted based on how you train your model and the feedback loop.
+        if prediction[0] >= 0.8:
+            local_nn_response = "Some response from local model."  # This should be replaced with your logic to get a response from the local model.
             self.context_manager.update_context(user_input, local_nn_response)
-            return local_nn_response, True
+            return local_nn_response, True, 1.0  # Return response, is_from_local_model = True, confidence = 1.0
 
-        # 3. GPT (OpenAI)
+        # If neither the knowledge base nor the local model returns a satisfactory answer, fall back to GPT-3
         try:
             gpt_response = call_openai_gpt_api(user_input)
             if gpt_response:
                 self.context_manager.update_context(user_input, gpt_response)
-                return gpt_response, False
+                return gpt_response, False, 0.0  # Return response, is_from_local_model = False, confidence = 0.0
         except Exception as e:
             print(f"OpenAI API Error: {e}")
+            error_response = "Sorry, I couldn't process that request."
+            return error_response, False, 0.0  # Return error response, is_from_local_model = False, confidence = 0.0
 
-        # 4. Browser Search using Selenium
-        snippet = google_search(user_input)
-        if snippet:
-            response = f"Here's what I found about '{user_input}': {snippet}. Would you like to explore more on this topic or provide information on it?"
-            self.context_manager.update_context(user_input, response)
-            return response, False
-
-        # 5. Default generic response
-        generic_resp = self.generic_response(user_input)
-        self.context_manager.update_context(user_input, generic_resp)
-        return generic_resp, False
 
     def local_neural_network_predict(self, user_input, context):
+        if not user_input:  # Check for empty input
+            return "I'm not sure how to respond to that.", 0
+
         # Generate embedding for the input
         input_embedding = generate_embeddings(user_input)  # assuming this function returns a numpy array
 
@@ -84,7 +82,7 @@ class DialogueManager:
         # Convert probability to class (0 or 1)
         predicted_class = 1 if predicted_prob > 0.5 else 0
 
-        return predicted_class
+        return predicted_class, predicted_prob  # Return the confidence as well
 
     def generic_response(self, user_input):
         return "I'm sorry, I don't know the answer to that."

@@ -10,7 +10,6 @@ with open('config/api_keys.json', 'r') as f:
 # Load Universal Sentence Encoder
 embed = hub.load("https://tfhub.dev/google/universal-sentence-encoder/4")
 
-
 def get_sentence_embedding(sentence: str) -> list:
     """
     Gets the embedding for a given sentence using the Universal Sentence Encoder.
@@ -21,8 +20,7 @@ def get_sentence_embedding(sentence: str) -> list:
     Returns:
     - list: The sentence embedding.
     """
-    return embed([str(sentence)])[0].numpy()
-
+    return embed([str(sentence)])[0].numpy().tolist()
 
 def convert_text_to_embedding(text: str) -> list:
     """
