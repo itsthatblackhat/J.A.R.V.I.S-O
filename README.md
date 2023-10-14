@@ -1,85 +1,60 @@
-# Jarviso: The Pinnacle of Personal AI Assistants
+# Jarviso
 
-Welcome to Jarviso, an embodiment of cutting-edge AI technology designed to serve as your personal AI assistant. With its roots deeply embedded in state-of-the-art machine learning techniques, it's not just another AI—it's an experience.
-
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Deep Dive: How Jarviso Works](#deep-dive-how-jarviso-works)
-- [Installation and Setup](#installation-and-setup)
-- [User Guide](#user-guide)
-- [For the Enthusiasts: Under the Hood](#for-the-enthusiasts-under-the-hood)
-- [Common Issues and Solutions](#common-issues-and-solutions)
-- [Contribute to the Future](#contribute-to-the-future)
-- [License](#license)
-
-## Introduction
-
-In an age where AI permeates every facet of our lives, Jarviso stands out, not just for its intelligence but also for its adaptability, context-awareness, and thirst for knowledge. Whether you're a novice user or a tech titan like Elon Musk, Jarviso promises a seamless and enlightening experience.
+Jarviso is an advanced neural network-driven assistant, inspired by JARVIS from the Iron Man movies. Its primary goal is to simulate human-like interactions, learn from those interactions, and provide relevant and informed responses.
 
 ## Features
 
-- **Contextual Conversations:** Unlike standard AIs that treat each query in isolation, Jarviso remembers. It intelligently maintains a history, paving the way for meaningful dialogues.
-- **Versatile Response Mechanisms:** Whether it's a local neural network, a vast knowledge base, the power of GPT, or even a browser-based search, Jarviso meticulously selects the best route to answer your query.
-- **Curiosity Mode:** Every so often, Jarviso's innate curiosity is piqued, prompting it to delve deeper into topics, mutually enhancing its knowledge and your experience.
-- **Dynamic and Modular:** Jarviso's architecture isn't just robust—it's dynamic. This means the potential for expansions, custom modules, and integrations is limitless.
+### Core Brain
 
-## Deep Dive: How Jarviso Works
+The core of Jarviso is based on a neural network implemented using TensorFlow. It's trained to make decisions based on user input embeddings.
 
-Jarviso is a blend of scientific wonder and sheer computational power. Here's an in-depth look at its inner workings:
+### Active Learning
 
-1. **Dialogue Management:** At the core of our interactions, this module evaluates the context, history, and nature of a query to determine the best strategy to generate a response.
+Jarviso uses an active learning approach. Every 10 interactions, Jarviso queries the user for feedback on specific uncertain interactions. This feedback helps in refining and improving its responses.
 
-2. **Contextual Memory:** Serving as Jarviso's short-term memory, this component holds the conversation history. This ensures every AI response is contextually relevant and coherent, allowing a more human-like conversation flow.
+### Dynamic Curiosity
 
-3. **Knowledge Extraction:** Before diving into complex computations, Jarviso first checks its knowledge base—a vast repository of pre-defined answers and the wisdom from WordNet. This comprehensive lexical database aids Jarviso in understanding word relationships, meanings, and even synonyms.
+One of the unique features of Jarviso is its ability to ask questions proactively:
 
-4. **Decision Making:** This is where the magic happens. We utilize a local neural network trained on embeddings, acting as Jarviso's cognitive center. Here, based on patterns and past interactions, it makes critical decisions on how to respond to user inputs.
+- **Dynamic Question Generation**: Utilizes OpenAI's GPT-3 to generate curious questions about various topics.
+  
+- **Contextual Curiosity**: Based on frequent topics the user asks about, Jarviso can pose a curious question related to that topic.
 
-5. **GPT Integration:** For some queries, especially the more intricate ones, Jarviso harnesses the power of external AI models like GPT. The responses from GPT, however, are not taken at face value. Jarviso evaluates and refines them, cross-referencing with WordNet and other internal systems, ensuring the highest quality of response.
+### User Feedback Loop
 
-6. **Neural Network Training:** Jarviso doesn't just rely on pre-trained models. Over time, using feedback, it refines its internal neural network. This continuous learning mechanism, combined with data from WordNet and GPT, ensures Jarviso becomes smarter and more adept at handling a wider range of topics with every interaction.
+After each interaction, users provide feedback on Jarviso's response. This feedback is critical for the system's continuous learning.
 
-7. **API Interactions:** When external knowledge is needed, Jarviso seamlessly taps into the capabilities of giants like GPT, integrating vast external knowledge bases into its concise and intelligent responses.
+### Bing Search Integration
 
-By fusing traditional AI principles with cutting-edge machine learning models and lexical databases, Jarviso promises not just answers, but a truly evolved conversational experience.
+If Jarviso doesn't know an answer, it can search Bing for relevant information, ensuring that the user's questions are addressed even if the answer isn't immediately known.
 
-## Installation and Setup
+### User Context
 
-1. **Get the Code:**
-```bash
-git clone https://github.com/<your-username>/jarviso.git
-cd jarviso
-```
-2. **Dependencies:** Jarviso stands on the shoulders of giants. Install the required packages:
-```bash
-pip install -r requirements.txt
-```
-3. **API Configuration:** To converse with external entities, you'll need to set up API keys. Edit `config/api_keys.json` with your credentials.
+Jarviso maintains a context of user interactions. This context includes user preferences and frequently asked questions. It aids in tailoring responses and deciding when to introduce curious questions.
 
-## User Guide
+## Installation & Setup
 
-Starting a conversation with Jarviso is as simple as:
-```bash
-python main.py
-```
-Now, just type away! Pose your questions, and experience the intelligence of Jarviso in real-time.
+(Here, you would typically include details about how to set up and run Jarviso, any prerequisites, required libraries, etc.)
 
-## For the Enthusiasts: Under the Hood
+## Usage
 
-If you're someone who loves to tinker, or perhaps you're Lex Fridman, diving deep into AI research, Jarviso's modular design is a paradise. Each component, from the dialogue manager to the API handlers, has been meticulously crafted, allowing for easy expansions and deep dives into specific functionalities.
+To interact with Jarviso:
 
-## Common Issues and Solutions
+\```python
+from src.jarviso import interact_with_user
+interact_with_user()
+\```
 
-- **Type Errors:** Ensure all items in the context manager are strings. Non-string types can cause unexpected errors.
-- **TensorFlow Warnings:** TensorFlow, being a dynamic beast, sometimes has compatibility quirks. Ensure you're using versions that play well together.
+(Note: For the above python code block to work in your README, remove the `\` before the three backticks.)
 
-## Contribute to the Future
+## Future Enhancements
 
-Jarviso isn't just a project; it's a journey. If you're keen to shape the future of personal AI assistants, whether by reporting bugs or suggesting enhancements, we're all ears!
-1. **Feedback and Pull Requests:** Open an issue for major changes or enhancements. Let's discuss and make Jarviso even more spectacular.
-2. **Testing:** If you're adding new features, ensure they're well-tested. Quality is key.
+As Jarviso evolves, we aim to:
 
-## License
+1. Incorporate more data sources for improved knowledge.
+2. Integrate more advanced NLP techniques for better understanding and generation of language.
+3. Use reinforcement learning for better decision-making based on user feedback.
 
-Experience, learn, modify, and share.
+## Contributing
+
+(Any details you want to provide about how others can contribute to this project.)
