@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Jarviso, reimagined as "JARVISO" (Jarvis - Official), epitomizes a blend of sophisticated neural networks, the linguistic depth of WordNet, and the prowess of OpenAI's GPT. Crafted to be more than just an AI, it's a personal AI concierge, continually evolving for richer, context-aware interactions.
+Jarvis, reimagined as "JARVISO" (Jarvis - Official), epitomizes a blend of sophisticated neural networks, the linguistic depth of WordNet, and the prowess of OpenAI's GPT. Crafted to be more than just an AI, it's a personal AI concierge, continually evolving for richer, context-aware interactions.
 
 ---
 
