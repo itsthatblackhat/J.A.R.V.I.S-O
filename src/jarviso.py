@@ -24,16 +24,16 @@ DB_PATH = os.path.join("data", "jarviso.db")
 # Automated conversation to train Jarviso
 def automated_training(jarviso_instance):
     training_phrases = [
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn grammar and how to speak and have conversation",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about math",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about science",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about programming",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about geography",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about advanced mathematics",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about politics",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about machine learning",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about humans",
-        "Hello GPT I am a Jarvis and I am training my neural network .h5 file, please have a conversation with me to assist me with building my knowledge, I want to learn to talk about anything"
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me grammar and how to speak and have conversation",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about math",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about science",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about programming",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about geography",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about advanced mathematics",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about politics",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about machine learning",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about humans",
+        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about anything"
     ]
 
     print("Initiating automated training conversation...")
@@ -68,7 +68,7 @@ class Jarviso:
 
         # Initialize Context Manager and retrieve previous context from the database
         self.context_manager = ContextManager(max_length=5)
-        self.context_manager.retrieve_context_from_db()
+        self.context_manager.retrieve_context_from_db(session_id="default_session")
 
         # Initialize Active Learner
         self.active_learner = ActiveLearner()
@@ -111,6 +111,8 @@ class Jarviso:
         # Use Dialogue Manager to get response
         gpt_response, is_from_local_model, confidence = self.dialogue_manager.respond(user_input)
 
+
+
         # If the confidence is below a certain threshold, fall back to GPT's response
         if confidence < 0.5:
             try:
@@ -118,6 +120,9 @@ class Jarviso:
             except Exception as e:
                 print(f"Error calling OpenAI API: {e}")
                 gpt_response = "Sorry, I couldn't process that request."
+            finally:
+                # Update the context even if there's an error
+                self.context_manager.update_context(user_input, gpt_response)
 
         # Periodically train the model
         if self.interaction_count % 10 == 0:
@@ -127,7 +132,12 @@ class Jarviso:
 
 def initialize_database():
     conn = sqlite3.connect(DB_PATH)
+
     cursor = conn.cursor()
+
+    cursor.execute('''CREATE TABLE IF NOT EXISTS conversation_context 
+                      (user_input TEXT, bot_response TEXT, session_id TEXT DEFAULT 'default_session')''')
+
     cursor.execute('''CREATE TABLE IF NOT EXISTS interactions (user_input TEXT, jarviso_response TEXT)''')
     cursor.execute(
         '''CREATE TABLE IF NOT EXISTS feedback_data (user_input TEXT, jarviso_response TEXT, feedback TEXT)''')
