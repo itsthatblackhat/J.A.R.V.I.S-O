@@ -25,5 +25,5 @@ def call_openai_gpt_api(prompt: str) -> Optional[str]:
         content = response.json()
         return content.get('choices', [{}])[0].get('text', '').strip()
     except Exception as e:
-        print(f"Error in call_openai_gpt_api: {e}")
+        print(f"OpenAI API Error: {e}")
         return None
