@@ -14,6 +14,15 @@ INTERACTION_THRESHOLD = 100  # Number of interactions before retraining
 
 interaction_counter = 0  # To keep track of the number of interactions
 
+def initialize_tf():
+    """
+    Initialize TensorFlow threading settings before any other TensorFlow operations.
+    """
+    if not tf.config.experimental.list_physical_devices('GPU'):
+        tf.config.threading.set_inter_op_parallelism_threads(2)
+        tf.config.threading.set_intra_op_parallelism_threads(4)
+
+#initialize_tf()  # Call this at the start, before any TensorFlow operations
 
 def create_tables(conn):
     c = conn.cursor()
@@ -43,6 +52,15 @@ def save_training_data(conn, embeddings, decisions):
     conn.commit()
 
 
+def train_core_brain(embeddings, decisions):
+    #initialize_tf()  # Initialize TensorFlow settings
+    embeddings = np.array(embeddings)
+    decisions = np.array(decisions)
+    model = build_model(embeddings.shape[1])
+    model.fit(embeddings, decisions, epochs=10)
+    save_model_parameters(conn, model)
+    return model
+
 def load_training_data(conn):
     c = conn.cursor()
     c.execute('SELECT embedding, decision FROM training_data')
@@ -51,17 +69,8 @@ def load_training_data(conn):
     decisions = [row[1] for row in rows]
     return embeddings, decisions
 
-
-def train_core_brain(embeddings, decisions):
-    embeddings = np.array(embeddings)
-    decisions = np.array(decisions)
-    model = build_model(embeddings.shape[1])
-    model.fit(embeddings, decisions, epochs=10)
-    save_model_parameters(conn, model)
-    return model
-
-
 def build_model(input_dim):
+    #initialize_tf()  # Initialize TensorFlow settings
     model = keras.models.Sequential([
         keras.layers.Dense(128, activation='relu', input_dim=input_dim),
         keras.layers.Dropout(0.2),
