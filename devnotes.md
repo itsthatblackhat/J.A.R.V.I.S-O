@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Jarviso, an embodiment of the moniker "JARVISO" (Jarvis - Official), is our ambitious venture that amalgamates the intricacies of neural networks, the vast reservoir of WordNet, and the unmatched capabilities of OpenAI's GPT. Conceptualized as a personal AI assistant, it is in a perpetual state of evolution, striving for more context-aware and insightful interactions.
+Jarviso, reimagined as "JARVISO" (Jarvis - Official), epitomizes a blend of sophisticated neural networks, the linguistic depth of WordNet, and the prowess of OpenAI's GPT. Crafted to be more than just an AI, it's a personal AI concierge, continually evolving for richer, context-aware interactions.
 
 ---
 
@@ -11,111 +11,136 @@ Jarviso, an embodiment of the moniker "JARVISO" (Jarvis - Official), is our ambi
 ### 1. **Main Modules**:
 
 - **`main.py`**:
-  - **Purpose**: The springboard into Jarviso's realm.
+  - **Purpose**: The launchpad of Jarviso.
   - **Main Function**: 
-    - `interact_with_user()`: Kindles the primary user interaction loop.
+    - `interact_with_user()`: Initiates the primary user interaction loop.
   
 - **`jarviso.py`**:
-  - **Purpose**: Serves as the main orchestrator of interactions and command definitions.
+  - **Purpose**: The backbone of interactions and user command orchestration.
   - **Main Function**: 
-    - `interact_with_user()`: Chooses between different response generation strategies.
+    - `interact_with_user()`: Decides between different response-generation strategies.
+  - **Integration**:
+    - **WordNet Utilization**: Newly added capability to harness WordNet, enhancing token understanding and refining responses.
 
 - **`dialogue_manager.py`**:
   - **Attributes**: 
-    - `recent_questions`: A cache of recent user queries.
-    - `local_model`: Instance of the neural network.
-    - `context_manager`: Stewards the conversation context.
+    - `recent_questions`: Stores recent user queries.
+    - `local_model`: An instance of the neural network.
+    - `context_manager`: Manages the conversation context.
   - **Key Methods**: 
-    - `respond()`: Arbitrates the optimal response avenue.
-    - `local_neural_network_predict()`: Leverages the neural network for predictions.
-    - `generic_response()`: Provides fallback responses.
-  
+    - `respond()`: Chooses the best response route.
+    - `local_neural_network_predict()`: Uses the neural network for predictions.
+    - `generic_response()`: Provides fallback answers.
+
 - **`context_manager.py`**:
   - **Attributes**: 
-    - `context`: Safeguards the conversation lineage.
-    - `max_context_length`: Defines the ceiling for stored interactions.
+    - `context`: Retains the conversation chronicle.
+    - `max_context_length`: Sets the limit for stored interactions.
   - **Key Methods**: 
     - `update_context()`: Refreshes the conversation history.
-    - `get_context()`: Fetches the existing context.
+    - `get_context()`: Extracts the current context.
 
 ### 2. **Subdirectories**:
 
-- **`api_handlers`**: Interfaces for external service communications.
+- **`api_handlers`**: Bridges to external service communications.
   - **`openai_api.py`**:
     - **Function**: 
-      - `call_openai_gpt_api()`: Brokers interactions with the OpenAI GPT API, crafting responses.
+      - `call_openai_gpt_api()`: Interfaces with the OpenAI GPT API, generating responses.
 
-- **`knowledge_helpers`**: Curators of the internal knowledge sanctum and web search utilities.
+- **`knowledge_helpers`**: Curators of internal knowledge base and web quest utilities.
   - **Functions**: 
-    - `get_answer_from_knowledge_base()`: Matches queries against a repository of predefined answers.
-    - `google_search()`: Deploys Selenium to glean answers from the web.
+    - `get_answer_from_knowledge_base()`: Aligns queries with a collection of predefined answers.
+    - `google_search()`: Utilizes Selenium for web-sourced answers.
 
-- **`model`**: Houses the neural network models and affiliated utilities.
+- **`model`**: Safekeeps the neural network models and related utilities.
   - **`core_brain.py`**:
     - **Class `CoreBrain`**:
       - **Attributes**: 
         - `model`: The TensorFlow model instance.
       - **Methods**: 
-        - `train()`: Refines the neural architecture.
-        - `predict()`: Forges predictions.
-        - `save()`: Persists model parameters.
-        - `load()`: Resurrects a saved model.
-    
-- **`src`**: The nucleus of source code and utilities.
-  - **`feedback_processor.py`**: Manages user feedback.
+        - `train()`: Hones the neural architecture.
+        - `predict()`: Produces predictions.
+        - `save()`: Archives model parameters.
+        - `load()`: Restores a saved model.
+
+- **`src`**: The epicenter of source code and utilities.
+  - **`feedback_processor.py`**: Orchestrates user feedback.
     - **Function**: 
-      - `generate_embeddings()`: Transforms textual input into numerical embeddings.
+      - `generate_embeddings()`: Converts textual input into numerical embeddings.
   
-  - **`decision_maker.py`**: Oversees neural network training and model configurations.
+  - **`decision_maker.py`**: Directs neural network training and model parameters.
     - **Functions**: 
-      - `train_core_brain()`: Directs the training regime.
-      - `load_model_parameters()`: Retrieves archived model parameters.
+      - `train_core_brain()`: Pilots the training session.
+      - `load_model_parameters()`: Retrieves cached model parameters.
+
+- **`wordnet_utils.py`**:
+  - **Purpose**: A conduit to WordNet, enhancing lexical understanding.
+  - **Key Methods**:
+    - `get_synonyms()`: Retrieves synonyms for given words from WordNet.
+    - `get_definitions()`: Extracts definitions of words.
+    - `get_hypernyms()`: Gleans broader concepts linked to the word.
 
 ---
 
 ## Neural Network Paradigm
 
-Jarviso's neural architecture, embodied in `CoreBrain`, is envisaged as a binary classifier. It discerns whether a query should be addressed using indigenous knowledge or if it demands a more intricate resolution pathway.
+Jarviso's neural fabric, represented in `CoreBrain`, is visualized as a binary classifier. It discerns whether a query should be addressed using homegrown knowledge or if it requires an intricate solution.
 
 - **Architecture**: 
-  - **Input Layer**: Accepts embeddings.
-  - **Dense Layers**: Process the data.
-  - **Output Layer**: Renders a binary output.
+  - **Input Layer**: Welcomes embeddings.
+  - **Dense Layers**: Churns the data.
+  - **Output Layer**: Yields a binary output.
 
-- **Training Ritual**: 
-  - **Embeddings**: Textual user queries transformed into numerical vectors.
-  - **Decisions**: The canonical answers.
+- **Training Regimen**: 
+  - **Embeddings**: User queries translated into numerical vectors.
+  - **Decisions**: The gold-standard answers.
 
 ---
 
 ## SQLite Database
 
-- **Purpose**: Offers a nimble, localized storage solution.
-- **Usage**: Archives user interactions, feedback, and mission-critical system data.
-- **Interactions**: A plethora of modules/functions engage in reading/writing to this database.
+- **Purpose**: Offers a nimble, local storage solution.
+- **Usage**: Archives user interactions, feedback, and pivotal system data.
+- **Interactions**: Multiple modules/functions engage in reading/writing to this database.
 
 ---
 
 ## Interdependencies and Workflow
 
 1. **`main.py`**:
-  - Fires up `interact_with_user()` from `jarviso.py`.
+  - Invokes `interact_with_user()` from `jarviso.py`.
 
 2. **`jarviso.py`**:
-  - Leans on `dialogue_manager.py` for crafting responses.
-  - Employs `context_manager.py` to glean/update conversation history.
+  - Relies on `dialogue_manager.py` for response crafting.
+  - Engages `context_manager.py` to access/update conversation history.
+  - Newly added: 
+    - **WordNet Integration**: Utilizes `wordnet_utils.py` to refine responses, extracting more contextually apt synonyms, and ensuring semantic accuracy.
 
 3. **`dialogue_manager.py`**:
-  - Engages `model/core_brain.py` for localized neural predictions.
-  - Taps into `api_handlers` to glean responses from the external cosmos.
-  - Engages `knowledge_helpers` for indigenous knowledge checks and web-oriented inquisitions.
+  - Employs `model/core_brain.py` for predictions.
+  - Engages `api_handlers` for external source responses.
+  - Taps into `knowledge_helpers` for predefined knowledge and web scavenging.
 
 4. **`context_manager.py`**:
-  - Serves context, ensuring relevance in interactions.
-  - Influences various modules by dispensing historical data.
+  - Offers conversation context for apt replies.
+  - Influences other modules with historical data.
+
+---
+
+## Modern Enhancements
+
+- **WordNet Integration**: A significant stride forward, where Jarviso now leverages the linguistic richness of WordNet to:
+  - Refine responses, ensuring they're contextually apt.
+  - Augment understanding through synonyms, definitions, and hypernyms.
+  - This addition enhances Jarviso's semantic depth, allowing it to engage in more nuanced conversations.
+
+- **Caching & Adaptation Mechanism**: An intelligent caching system to store frequent queries and responses, reducing the need to always refer to the XML WordNet and adapt to user preferences.
+
+- **Feedback Integration**: A mechanism for users to provide feedback on Jarvis's responses, which is then utilized to continuously refine and improve Jarvis's understanding and responses.
 
 ---
 
 ## Conclusion
 
-This dossier offers a meticulous exploration into Jarviso, capturing the essence and weaving the narrative of each module, directory, and function. It is the touchstone for developers and contributors
+These development notes offer a panoramic view of Jarviso, capturing the architectural finesse, recent enhancements, and the symbiotic relationships between its components. It serves as a vital guidepost for developers and AI enthusiasts, ensuring clarity and vision.
+
