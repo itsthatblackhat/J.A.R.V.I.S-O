@@ -12,6 +12,11 @@ from src.context_manager import ContextManager
 from src.knowledge_processor import DATABASE_NAME
 from utils.data_loader import load_data, save_data, save_feedback_data, save_feedback_log, save_training_data
 from utils.model_loader import load_model, save_model
+from src.training_manager import TrainingManager
+from src.test_manager import TestManager
+from utils.wordnet_utils import get_definitions, get_synonyms, get_hypernyms
+
+
 
 # Load API keys from the config file
 with open("config/api_keys.json", "r") as file:
@@ -24,16 +29,16 @@ DB_PATH = os.path.join("data", "jarviso.db")
 # Automated conversation to train Jarviso
 def automated_training(jarviso_instance):
     training_phrases = [
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me grammar and how to speak and have conversation",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about math",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about science",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about programming",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about geography",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about advanced mathematics",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about politics",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about machine learning",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about humans",
-        "Hello I'm a Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about anything"
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me grammar and how to speak and have conversation",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about math",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about science",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about programming",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about geography",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about advanced mathematics",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about politics",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about machine learning",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about humans",
+        "Hello I'm Jarvis and I'm training my neural network .h5 file, have a conversation with me to assist me with building my knowledge, teach me to talk about anything"
     ]
 
     print("Initiating automated training conversation...")
@@ -76,6 +81,15 @@ class Jarviso:
         # Initialize Dialogue Manager
         self.dialogue_manager = DialogueManager(local_model=self.local_model, context_manager=self.context_manager)
 
+    def train_with_new_data(self, existing_data_path, new_data_path, output_path):
+        training_manager = TrainingManager(existing_data_path, new_data_path)
+        training_manager.run(output_path)
+
+    def test_performance(self, test_data_path):
+        test_manager = TestManager(test_data_path, self.dialogue_manager)
+        accuracy = test_manager.run_tests()
+        print(f"Jarviso's performance accuracy: {accuracy*100:.2f}%")
+
     def open_browser(self):
         self.browser.show()
 
@@ -101,6 +115,17 @@ class Jarviso:
         self.local_model = train_core_brain(embeddings, decisions)
         save_model(self.local_model, self.model_filepath)
 
+    def refine_response_with_wordnet(self, response):
+        # Tokenize the response to get words/phrases
+        words = response.split()
+        for word in words:
+            # Use WordNet to get synonyms
+            synonyms = get_synonyms(word)
+            if synonyms:
+                # Replace word with a synonym (for demonstration, we'll just pick the first one)
+                response = response.replace(word, synonyms[0])
+        return response
+
     def respond(self, user_input):
         self.interaction_count += 1
 
@@ -111,24 +136,27 @@ class Jarviso:
         # Use Dialogue Manager to get response
         gpt_response, is_from_local_model, confidence = self.dialogue_manager.respond(user_input)
 
-
+        # Refine the response using WordNet
+        refined_response = self.refine_response_with_wordnet(gpt_response)
 
         # If the confidence is below a certain threshold, fall back to GPT's response
         if confidence < 0.5:
             try:
                 gpt_response = call_openai_gpt_api(user_input)
+                refined_response = self.refine_response_with_wordnet(gpt_response)
             except Exception as e:
                 print(f"Error calling OpenAI API: {e}")
-                gpt_response = "Sorry, I couldn't process that request."
+                refined_response = "Sorry, I couldn't process that request."
             finally:
                 # Update the context even if there's an error
-                self.context_manager.update_context(user_input, gpt_response)
+                self.context_manager.update_context(user_input, refined_response)
 
         # Periodically train the model
         if self.interaction_count % 10 == 0:
             periodically_train_model()
 
-        return gpt_response
+        return refined_response
+
 
 def initialize_database():
     conn = sqlite3.connect(DB_PATH)
@@ -200,15 +228,24 @@ def interact_with_user():
 if __name__ == "__main__":
     jarviso = Jarviso()
 
-    print("Welcome to Jarviso! Start your interaction by typing a message.")
-    print("Type 'exit' or 'quit' to end the session.")
+    action = input("Choose an action: [interact/test/train/exit]: ").lower()
 
-    while True:
-        user_input = input("User: ")
-        gpt_response = jarviso.respond(user_input)
-        jarviso.collect_feedback_and_train(user_input, gpt_response)
+    while action != "exit":
+        if action == "interact":
+            user_input = input("User: ")
+            gpt_response = jarviso.respond(user_input)
+            jarviso.collect_feedback_and_train(user_input, gpt_response)
+        elif action == "test":
+            test_data_path = "path_to_test_data.json"
+            jarviso.test_performance(test_data_path)
+        elif action == "train":
+            existing_data_path = 'path_to_existing_data.json'
+            new_data_path = 'path_to_new_data.json'
+            output_path = 'path_to_save_combined_data.json'
+            jarviso.train_with_new_data(existing_data_path, new_data_path, output_path)
+        else:
+            print("Invalid choice. Please choose from [interact/test/train/exit].")
 
-        # Exit conditions
-        if user_input.lower() in ["exit", "end", "quit"]:
-            print("Thank you for interacting with Jarviso. Have a great day!")
-            break
+        action = input("Choose an action: [interact/test/train/exit]: ").lower()
+
+    print("Thank you for interacting with Jarviso. Have a great day!")
