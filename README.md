@@ -66,8 +66,7 @@ If you're someone who loves to tinker, or perhaps you're Lex Fridman, diving dee
 
 ## Contribute to the Future
 
-Jarviso isn't just a project; it's a journey. If you're keen to shape the future of personal AI assistants, whether by reporting bugs or suggesting enhancements, we're all ears. And if you're John Carmack and you've got some groundbreaking optimizations, we're doubly excited!
-
+Jarviso isn't just a project; it's a journey. If you're keen to shape the future of personal AI assistants, whether by reporting bugs or suggesting enhancements, we're all ears!
 1. **Feedback and Pull Requests:** Open an issue for major changes or enhancements. Let's discuss and make Jarviso even more spectacular.
 2. **Testing:** If you're adding new features, ensure they're well-tested. Quality is key.
 
