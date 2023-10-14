@@ -28,7 +28,7 @@ def save_data(data: pd.DataFrame, table_name: str):
     data.to_sql(table_name, conn, if_exists="replace", index=False)
     conn.close()
 
-def save_feedback_data(feedback_data: list, table_name: str):
+def save_feedback_data(feedback_data: list, table_name: str,user_input, jarviso_response, feedback):
     """
     Save feedback data to a specified SQLite table.
     """
