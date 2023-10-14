@@ -26,13 +26,23 @@ In an age where AI permeates every facet of our lives, Jarviso stands out, not j
 
 ## Deep Dive: How Jarviso Works
 
-Jarviso is not magic—it's science, and here's a breakdown:
+Jarviso is a blend of scientific wonder and sheer computational power. Here's an in-depth look at its inner workings:
 
-1. **Dialogue Management:** The heart of the interaction, this module determines the best strategy to generate a response.
-2. **Contextual Memory:** Think of this as Jarviso's short-term memory. It holds the conversation history, ensuring the AI's responses are contextually apt.
-3. **Knowledge Extraction:** Before resorting to complex computations, Jarviso checks its knowledge base—a repository of pre-defined answers.
-4. **Decision Making:** A local neural network trained on embeddings. This is Jarviso's brain, where it makes decisions based on patterns it has learned.
-5. **API Interactions:** For some queries, Jarviso taps into the power of external giants like GPT, seamlessly integrating their capabilities into its responses.
+1. **Dialogue Management:** At the core of our interactions, this module evaluates the context, history, and nature of a query to determine the best strategy to generate a response.
+
+2. **Contextual Memory:** Serving as Jarviso's short-term memory, this component holds the conversation history. This ensures every AI response is contextually relevant and coherent, allowing a more human-like conversation flow.
+
+3. **Knowledge Extraction:** Before diving into complex computations, Jarviso first checks its knowledge base—a vast repository of pre-defined answers and the wisdom from WordNet. This comprehensive lexical database aids Jarviso in understanding word relationships, meanings, and even synonyms.
+
+4. **Decision Making:** This is where the magic happens. We utilize a local neural network trained on embeddings, acting as Jarviso's cognitive center. Here, based on patterns and past interactions, it makes critical decisions on how to respond to user inputs.
+
+5. **GPT Integration:** For some queries, especially the more intricate ones, Jarviso harnesses the power of external AI models like GPT. The responses from GPT, however, are not taken at face value. Jarviso evaluates and refines them, cross-referencing with WordNet and other internal systems, ensuring the highest quality of response.
+
+6. **Neural Network Training:** Jarviso doesn't just rely on pre-trained models. Over time, using feedback, it refines its internal neural network. This continuous learning mechanism, combined with data from WordNet and GPT, ensures Jarviso becomes smarter and more adept at handling a wider range of topics with every interaction.
+
+7. **API Interactions:** When external knowledge is needed, Jarviso seamlessly taps into the capabilities of giants like GPT, integrating vast external knowledge bases into its concise and intelligent responses.
+
+By fusing traditional AI principles with cutting-edge machine learning models and lexical databases, Jarviso promises not just answers, but a truly evolved conversational experience.
 
 ## Installation and Setup
 
