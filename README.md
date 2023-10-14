@@ -72,5 +72,4 @@ Jarviso isn't just a project; it's a journey. If you're keen to shape the future
 
 ## License
 
-Experience, learn, modify, and share. Jarviso is [MIT licensed](https://choosealicense.com/licenses/mit/).
-
+Experience, learn, modify, and share.
