@@ -4,7 +4,7 @@ JarvisoBrain is a sophisticated digital representation of various components of 
 
 ## 1. Project Structure
 
-The project is organized into different directories, each representing a specific functionality or region of the brain. Here's an overview:
+The project is organized into different directories, each representing a specific functionality or region of the brain:
 
 - `BrainRegions`: Contains different brain regions like the `AuditoryCortex`, `VisualCortex`, `PrefrontalCortex`, etc.
 - `Neurons`: Houses various neuron implementations like `SensoryNeurons`, `MotorNeurons`, and `Interneurons`.
@@ -14,84 +14,160 @@ The project is organized into different directories, each representing a specifi
 
 ### 2.1 AuditoryCortex
 
-- **Classes**: AuditoryCortex, AuditoryNeuron
-- **Functionality**: Responsible for processing auditory inputs.
+- **Classes**: 
+  - `AuditoryCortex`: Main class responsible for processing auditory inputs.
+  - `AuditoryNeuron`: Represents individual auditory neurons.
+  
+- **Functionality**: 
+  - Captures and preprocesses audio data.
+  - Processes auditory inputs using a pretrained model.
+  - Sends processed data to memory storage.
+  
+- **Attributes**:
+  - `neurons`: List of auditory neurons.
+  - `model`: A pretrained model for audio processing.
+  
 - **Key Methods**: 
-  - `capture_audio`: Captures audio for a given duration.
-  - `preprocess_audio`: Preprocesses raw audio data.
-  - `process_audio_input`: Handles and processes incoming audio events.
+  - `capture_audio(duration)`: Captures audio for a given duration.
+  - `preprocess_audio(audio)`: Preprocesses raw audio data.
+  - `process_audio_input(event)`: Handles and processes incoming audio events using the model.
 
 ### 2.2 VisualCortex
 
-- **Classes**: VisualCortex, VisualNeuron
-- **Functionality**: Processes visual data and interacts with visual neurons.
+- **Classes**: 
+  - `VisualCortex`: Main class for handling visual data.
+  - `VisualNeuron`: Represents individual visual neurons.
+  
+- **Functionality**: 
+  - Captures and preprocesses visual data (image).
+  - Sends processed visual data to memory storage.
+  
+- **Attributes**:
+  - `neurons`: List of visual neurons.
+  
 - **Key Methods**:
-  - `capture_image`: Captures an image.
-  - `process_image_input`: Processes the captured image.
+  - `capture_image()`: Captures an image.
+  - `process_image_input(event)`: Processes the captured image.
 
 ### 2.3 PrefrontalCortex
 
-- **Classes**: PrefrontalCortex
-- **Functionality**: Responsible for decision-making based on sensory inputs.
+- **Classes**: 
+  - `PrefrontalCortex`: Handles decision-making processes.
+  
+- **Functionality**: 
+  - Processes sensory input.
+  - Executes decision-making based on sensory input and historical data.
+  - Sends commands to motor neurons.
+  
+- **Attributes**:
+  - `sensory_neurons`: List of sensory neurons.
+  - `interneurons`: List of interneurons.
+  - `motor_neurons`: List of motor neurons.
+  
 - **Key Methods**: 
-  - `process_input`: Processes the incoming events.
-  - `execute_decision_making`: Retrieves historical data to aid decision-making.
-  - `plan_and_execute_task`: Executes tasks based on decisions made.
+  - `process_input(event)`: Processes incoming sensory data events.
+  - `execute_decision_making()`: Uses historical data and current sensory neuron activity to make decisions.
+  - `plan_and_execute_task(decision)`: Executes tasks based on the decision made.
 
 ### 2.4 SomatosensoryCortex
 
-- **Classes**: SomatosensoryCortex, SomatoNeuron
-- **Functionality**: Processes somatosensory data like touch.
+- **Classes**: 
+  - `SomatosensoryCortex`: Main class for processing touch-related sensory data.
+  - `SomatoNeuron`: Represents individual somatosensory neurons.
+  
+- **Functionality**: 
+  - Processes somatosensory data like touch.
+  
+- **Attributes**:
+  - `neurons`: Dictionary containing lists of somatosensory neurons categorized by sensory regions (e.g., 'hand', 'foot').
+  
 - **Key Methods**:
-  - `process_sensory_input`: Processes the sensory data for touch and other sensations.
-  - `get_activity_map`: Retrieves the activity map of neurons.
-
-### 2.5 Hippocampus (Placeholder, as we did not define specific methods for it yet)
-
-- **Classes**: Hippocampus
-- **Functionality**: Memory storage and retrieval.
-- **Key Methods**: 
-  - `store_memory`: Store new memories.
-  - `retrieve_memory`: Fetch a stored memory.
+  - `process_sensory_input(sensory_type, region, intensity)`: Processes touch and other sensations based on the region and type of sensation.
+  - `get_activity_map()`: Retrieves the activity map of neurons.
 
 ## 3. Neurons
 
 ### 3.1 SensoryNeurons
 
-- **Classes**: SensoryNeuron, VisualNeuron, AuditoryNeuron
-- **Functionality**: Receives and processes sensory input.
+- **Classes**: 
+  - `SensoryNeuron`: Base class for sensory neurons.
+  - `VisualNeuron`: Inherits from SensoryNeuron; specific for visual data.
+  - `AuditoryNeuron`: Inherits from SensoryNeuron; specific for auditory data.
+  
+- **Functionality**: 
+  - Receives and processes sensory input.
+  
+- **Attributes**:
+  - `neuron_type`: Type of the sensory neuron (e.g., 'visual', 'auditory').
+  - `state`: Current state of the neuron.
+  
 - **Key Methods**:
-  - `receive_input`: Receives external sensory input.
-  - `process_signal`: Processes the current signal to determine neuron activation.
+  - `receive_input(data)`: Receives external sensory input.
+  - `process_signal()`: Processes the current signal to determine neuron activation.
 
 ### 3.2 MotorNeurons
 
-- **Classes**: MotorNeuron
-- **Functionality**: Responsible for generating motor outputs in response to brain commands.
+- **Classes**: 
+  - `MotorNeuron`: Represents motor neurons responsible for generating outputs.
+  
+- **Functionality**: 
+  - Receives signals from decision-making processes.
+  - Determines activation based on received signals.
+  
+- **Attributes**:
+  - `neuron_type`: Type of the motor neuron.
+  - `state`: Current state of the neuron.
+  
 - **Key Methods**:
-  - `receive_signal`: Receives a signal and determines if the neuron should activate.
+  - `receive_signal(signal)`: Receives a signal and determines activation.
 
 ### 3.3 Interneurons (Placeholder, as specific details were not defined)
 
-- **Classes**: Interneuron 
-- **Functionality**: Facilitates communication between sensory and motor neurons.
+- **Classes**: 
+  - `Interneuron`: Represents interneurons that facilitate communication between sensory and motor neurons.
+  
+- **Functionality**: 
+  - Facilitates communication between sensory and motor neurons.
+  
+- **Attributes**:
+  - `state`: Current state of the interneuron.
+  
 - **Key Methods**:
-  - `process_signal`: Processes incoming signals and forwards them accordingly.
+  - `process_signal()`: Processes incoming signals and forwards them accordingly.
 
 ## 4. Event Management
 
-- **Classes**: Event, EventType, EventDispatcher
-- **Functionality**: Manages the flow of information (events) within the system. Allows different components to communicate efficiently.
+- **Classes**: 
+  - `Event`: Represents a single event in the system.
+  - `EventType`: Enumeration of possible event types.
+  - `EventDispatcher`: Manages the flow of events in the system.
+  
+- **Functionality**: 
+  - Allows different components of the system to communicate efficiently using events.
+  
+- **Attributes**:
+  - `listeners`: A dictionary where keys are event types and values are lists of listener functions.
+  
 - **Key Methods**:
-  - `register_listener`: Registers a function as a listener for a specific event type.
-  - `dispatch`: Sends an event to all listeners of its type.
+  - `register_listener(event_type, listener)`: Registers a listener function for a specific event type.
+  - `dispatch(event)`: Sends an event to all registered listeners of its type.
 
 ## 5. Memory Storage
 
-- **Classes**: BrainMessage, MessageType, ProcessingDirective
-- **Functionality**: Handles the storage of brain activity logs, processed data, and other relevant information.
+- **Classes**: 
+  - `BrainMessage`: Represents a message in the system.
+  - `MessageType`: Enumeration of possible message types.
+  - `ProcessingDirective`: Enumeration of processing directives.
+  
+- **Functionality**: 
+  - Handles the storage of brain activity logs, processed data, and other relevant information in an SQLite database (`mainbrain.db`).
+  
+- **Attributes**:
+  - `data_payload`: Contains the actual data being sent in the message.
+  - `processing_directive`: Directive indicating how the message should be processed.
+  
 - **Key Methods**:
-  - `save_to_db`: Saves the brain message to the SQLite database.
+  - `save_to_db()`: Saves the brain message to the SQLite database.
 
 ## 6. Interactions and Flow
 
@@ -109,17 +185,17 @@ The system uses an SQLite database (`mainbrain.db`) to store various types of da
 
 The feedback system is designed to emulate emotions by adjusting the brain's chemical balance based on external stimuli. This helps in training the brain and refining its decision-making capabilities.
 
-## 9. Motor Functions and Outputs
+## 9. Signal Processing and Visualization
 
-The MotorNeurons receive commands from the PrefrontalCortex after decision-making processes. They are responsible for generating outputs, which could be linked to external systems for actions like movement, speech, or other responses.
+The system processes raw sensory data, be it visual, auditory, or somatosensory. After processing, the data can be visualized for further analysis, aiding in understanding and refining the brain's responses.
 
-## 10. Signal Processing and Visualization
+## 10. Chemicals and Emulation of Feelings
 
-The system is equipped to process raw sensory data, be it visual, auditory, or somatosensory. Post-processing, the data can be visualized for further analysis, aiding in the understanding and refining of the brain's responses.
+The system can emulate feelings by adjusting the balance of virtual "chemicals" in response to feedback. This influences decision-making and other processes, adding a layer of complexity and adaptability to the system.
 
 ## 11. Further Details
 
-For further understanding, developers are encouraged to dive deep into each module and explore the comments and docstrings. This will provide granular insights into the working and intricacies of each component.
+For further understanding, developers are encouraged to dive deep into each module and explore the comments and docstrings. This will provide granular insights into the workings and intricacies of each component.
 
 ----
 
