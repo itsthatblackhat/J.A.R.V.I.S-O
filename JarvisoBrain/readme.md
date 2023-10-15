@@ -1,4 +1,3 @@
-
 # JarvisoBrain Development Notes
 
 JarvisoBrain is a sophisticated digital representation of various components of the human brain. Its architecture encapsulates different brain regions, neurons, event management, and memory storage. This documentation aims to provide a comprehensive understanding of its structure and functionalities.
@@ -30,7 +29,30 @@ The project is organized into different directories, each representing a specifi
   - `capture_image`: Captures an image.
   - `process_image_input`: Processes the captured image.
 
-... [other regions]
+### 2.3 PrefrontalCortex
+
+- **Classes**: PrefrontalCortex
+- **Functionality**: Responsible for decision-making based on sensory inputs.
+- **Key Methods**: 
+  - `process_input`: Processes the incoming events.
+  - `execute_decision_making`: Retrieves historical data to aid decision-making.
+  - `plan_and_execute_task`: Executes tasks based on decisions made.
+
+### 2.4 SomatosensoryCortex
+
+- **Classes**: SomatosensoryCortex, SomatoNeuron
+- **Functionality**: Processes somatosensory data like touch.
+- **Key Methods**:
+  - `process_sensory_input`: Processes the sensory data for touch and other sensations.
+  - `get_activity_map`: Retrieves the activity map of neurons.
+
+### 2.5 Hippocampus (Placeholder, as we did not define specific methods for it yet)
+
+- **Classes**: Hippocampus
+- **Functionality**: Memory storage and retrieval.
+- **Key Methods**: 
+  - `store_memory`: Store new memories.
+  - `retrieve_memory`: Fetch a stored memory.
 
 ## 3. Neurons
 
@@ -49,7 +71,12 @@ The project is organized into different directories, each representing a specifi
 - **Key Methods**:
   - `receive_signal`: Receives a signal and determines if the neuron should activate.
 
-... [other neuron types]
+### 3.3 Interneurons (Placeholder, as specific details were not defined)
+
+- **Classes**: Interneuron 
+- **Functionality**: Facilitates communication between sensory and motor neurons.
+- **Key Methods**:
+  - `process_signal`: Processes incoming signals and forwards them accordingly.
 
 ## 4. Event Management
 
@@ -65,8 +92,6 @@ The project is organized into different directories, each representing a specifi
 - **Functionality**: Handles the storage of brain activity logs, processed data, and other relevant information.
 - **Key Methods**:
   - `save_to_db`: Saves the brain message to the SQLite database.
-
-... [other modules and functionalities]
 
 ## 6. Interactions and Flow
 
@@ -84,9 +109,15 @@ The system uses an SQLite database (`mainbrain.db`) to store various types of da
 
 The feedback system is designed to emulate emotions by adjusting the brain's chemical balance based on external stimuli. This helps in training the brain and refining its decision-making capabilities.
 
-... [other intricate details and functionalities]
+## 9. Motor Functions and Outputs
 
-## 9. Further Details
+The MotorNeurons receive commands from the PrefrontalCortex after decision-making processes. They are responsible for generating outputs, which could be linked to external systems for actions like movement, speech, or other responses.
+
+## 10. Signal Processing and Visualization
+
+The system is equipped to process raw sensory data, be it visual, auditory, or somatosensory. Post-processing, the data can be visualized for further analysis, aiding in the understanding and refining of the brain's responses.
+
+## 11. Further Details
 
 For further understanding, developers are encouraged to dive deep into each module and explore the comments and docstrings. This will provide granular insights into the working and intricacies of each component.
 
