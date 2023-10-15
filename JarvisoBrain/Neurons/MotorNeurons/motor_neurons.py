@@ -2,8 +2,9 @@ import tensorflow as tf
 import numpy as np
 
 class MotorNeuron:
-    def __init__(self, neuron_id, neuron_type='alpha', synaptic_weights=None):
+    def __init__(self, neuron_id, neuron_type='alpha', synaptic_weights=None, activation_level=0):
         self.neuron_id = neuron_id
+        self.activation_level = activation_level
         self.neuron_type = neuron_type  # either 'alpha' or 'gamma'
         self.resting_potential = -70  # mV
         self.current_potential = self.resting_potential
@@ -67,9 +68,9 @@ class MotorNeuron:
         return f"MotorNeuron-{self.neuron_id} | Current Potential: {self.current_potential} mV | Type: {self.neuron_type}"
 
 
-def get_output(self):
-    # For now, return a binary output
-    return 1 if self.activation_level > 0.5 else 0
+    def get_output(self):
+        # For now, return a binary output
+        return 1 if self.activation_level > 0.5 else 0
 
 
 

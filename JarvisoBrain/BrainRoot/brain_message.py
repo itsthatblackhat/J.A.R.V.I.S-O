@@ -12,7 +12,15 @@ class MessageType(Enum):
     ACTION_SIGNAL = "ActionSignal"
     FEEDBACK = "Feedback"
     LEARNING_SIGNAL = "LearningSignal"
-    MOTOR_SIGNAL = "MotorSignal"  # New
+    MOTOR_SIGNAL = "MotorSignal"
+    FEEDBACK_STORED = "FeedbackStored"
+    TRAINING_DATA_STORED = "TrainingDataStored"
+    NEURAL_UPDATE = "NeuralUpdate"
+    ALERT = "Alert"
+    QUERY = "Query"
+    MEMORY_STORE_REQUEST = "MemoryStoreRequest"
+    MEMORY_RECALL_REQUEST = "MemoryRecallRequest"
+    INTERACTION = "Interaction"  # Added based on previous discussions
 
 
 class ProcessingDirective(Enum):
@@ -21,7 +29,10 @@ class ProcessingDirective(Enum):
     STORE = "Store"
     RECALL = "Recall"
     LEARN = "Learn"
-    ACTIVATE = "Activate"  # New, for activating motor functions
+    ACTIVATE = "Activate"
+    DEACTIVATE = "Deactivate"
+    UPDATE = "Update"
+    INVESTIGATE = "Investigate"
 
 
 class BrainMessage:
@@ -67,13 +78,14 @@ class BrainMessage:
 
 
 if __name__ == "__main__":
+    # Example of how BrainMessage can be used:
     visual_data = {
         "data_type": "Visual",
-        "data_values": [1, 2, 3, 4, 5]  # Just an example, real data would be more complex
+        "data_values": [1, 2, 3, 4, 5]
     }
 
     msg = BrainMessage(
-        db_path='path_to_mainbrain.db',
+        db_path='JarvisoBrain/NeuralDatabase/mainbrain.db',
         message_type=MessageType.SENSORY_DATA,
         data_payload=visual_data,
         processing_directive=ProcessingDirective.IMMEDIATE,
