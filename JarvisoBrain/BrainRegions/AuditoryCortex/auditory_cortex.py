@@ -6,6 +6,8 @@ from JarvisoBrain.BrainRoot.brain_message import BrainMessage, MessageType, Proc
 dispatcher = EventDispatcher()
 
 
+db_path='JarvisoBrain/NeuralDatabase/mainbrain.db'
+
 class AuditoryNeuron:
     def __init__(self, neuron_type, initial_state=0):
         self.neuron_type = neuron_type  # Could be 'primary_neuron', 'secondary_neuron', etc.
@@ -31,6 +33,8 @@ class AuditoryNeuron:
 class AuditoryCortex:
     def __init__(self, number_of_neurons, db_path):
         self.neurons = [AuditoryNeuron(neuron_type='primary_neuron') for _ in range(number_of_neurons)]
+        self.db_path = db_path
+        self.dispatcher = dispatcher
         self.db_path = db_path
         # Register the listener with the dispatcher
         dispatcher.register_listener(EventType.NEW_AUDIO_INPUT, self.receive_auditory_signal)
@@ -62,6 +66,14 @@ class AuditoryCortex:
     def process_signal(self):
         # Logic to further process the auditory signal for higher-level tasks
         pass
+
+    def process_audio_input(self, event):
+        # Placeholder: processing logic
+        print(f"Processing audio data: {event.data}")
+
+    def get_processed_data(self):
+        # Placeholder: return processed audio data
+        return "Processed audio data"
 
     def reset_all_neurons(self):
         for neuron in self.neurons:

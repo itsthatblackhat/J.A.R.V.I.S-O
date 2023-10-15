@@ -16,6 +16,14 @@ class MotorNeuron:
             synaptic_weights = {}
         self.synaptic_weights = synaptic_weights
 
+    def is_activated(self):
+        return self.current_potential >= self.threshold
+
+    def perform_action(self):
+        if self.is_activated():
+            # Placeholder: logic to perform an action
+            print(f"Motor Neuron {self.neuron_id} is performing an action!")
+
     def receive_input(self, input_signal, current_time):
         """
         Receive input from other neurons.
@@ -57,6 +65,12 @@ class MotorNeuron:
 
     def __str__(self):
         return f"MotorNeuron-{self.neuron_id} | Current Potential: {self.current_potential} mV | Type: {self.neuron_type}"
+
+
+def get_output(self):
+    # For now, return a binary output
+    return 1 if self.activation_level > 0.5 else 0
+
 
 
 # Sample usage:

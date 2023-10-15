@@ -12,6 +12,7 @@ class MessageType(Enum):
     ACTION_SIGNAL = "ActionSignal"
     FEEDBACK = "Feedback"
     LEARNING_SIGNAL = "LearningSignal"
+    MOTOR_SIGNAL = "MotorSignal"  # New
 
 
 class ProcessingDirective(Enum):
@@ -20,6 +21,7 @@ class ProcessingDirective(Enum):
     STORE = "Store"
     RECALL = "Recall"
     LEARN = "Learn"
+    ACTIVATE = "Activate"  # New, for activating motor functions
 
 
 class BrainMessage:

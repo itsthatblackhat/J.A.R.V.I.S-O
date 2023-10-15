@@ -1,7 +1,9 @@
-import cv2  # OpenCV is a library that can be used for real-time computer vision
+import cv2
 from JarvisoBrain.BrainRoot.event_manager import Event, EventType, EventDispatcher
+from JarvisoBrain.Neurons.MotorNeurons.motor_neurons import MotorNeuron
 
 dispatcher = EventDispatcher()
+
 
 class WebcamInterface:
     def __init__(self):
@@ -14,6 +16,7 @@ class WebcamInterface:
     def release(self):
         self.cap.release()
 
+
 class VisualNeuron:
     def __init__(self, neuron_type, initial_state=0):
         self.neuron_type = neuron_type  # Could be 'Simple_cell', 'Complex_cell', etc.
@@ -22,8 +25,6 @@ class VisualNeuron:
     def activate(self, stimulus):
         """Activate the neuron based on visual stimulus."""
         self.state += stimulus
-        # Additional logic for neuron activation, threshold checks, etc.
-        pass
 
     def reset(self):
         self.state = 0
@@ -31,17 +32,16 @@ class VisualNeuron:
     def get_state(self):
         return self.state
 
-    def propagate_signal(self, connected_neurons):
-        """Propagate signal to connected neurons."""
-        for neuron in connected_neurons:
-            neuron.activate(self.state)
 
 class VisualCortex:
-    def __init__(self, number_of_neurons):
+    def __init__(self, dispatcher, number_of_neurons=100):
+        self.dispatcher = dispatcher
         self.neurons = {
             'Simple_cell': [VisualNeuron(neuron_type='Simple_cell') for _ in range(number_of_neurons)],
             'Complex_cell': [VisualNeuron(neuron_type='Complex_cell') for _ in range(number_of_neurons)],
-            # Add other neuron types as necessary
+        }
+        self.motor_neurons = {
+            'webcam': MotorNeuron(neuron_id=1, neuron_type='webcam')
         }
 
     def receive_visual_input(self, visual_data, neuron_type):
@@ -49,16 +49,28 @@ class VisualCortex:
         for neuron, data in zip(self.neurons[neuron_type], visual_data):
             neuron.activate(data)
 
+            # Check conditions for activating motor actions
+            if neuron.get_state() > 50:  # Define the threshold value as per requirement
+                self.motor_neurons['webcam'].receive_input(20, current_time=0)  # Placeholder values
+
+        # Dispatch processed visual data
+        event = Event(EventType.PROCESSED_DATA_FROM_VISUAL_CORTEX, data=visual_data)
+        self.dispatcher.dispatch(event)
+
     def receive_realtime_input(self, webcam_interface):
         while True:  # Continuous loop for real-time feed
             frame = webcam_interface.get_frame()
             processed_data = self.preprocess_frame(frame)
-            self.receive_visual_input(processed_data, neuron_type='Simple_cell')  # or 'Complex_cell' based on the data
+            self.receive_visual_input(processed_data, neuron_type='Simple_cell')
+
+    def get_processed_data(self):
+        # This method can be customized to your needs. For now, it returns a list of states from 'Simple_cell' neurons.
+        return [neuron.get_state() for neuron in self.neurons['Simple_cell']]
 
     def preprocess_frame(self, frame):
         """Process and interpret raw frames."""
         # Placeholder for frame processing and interpretation logic
-        return frame  # or some processed version of it
+        return frame
 
     def reset_all_neurons(self):
         for neuron_type in self.neurons:
@@ -69,8 +81,9 @@ class VisualCortex:
         """Retrieve activity levels of specified neuron type."""
         return [neuron.get_state() for neuron in self.neurons[neuron_type]]
 
+
 if __name__ == "__main__":
-    visual_cortex = VisualCortex(number_of_neurons=100)
+    visual_cortex = VisualCortex(dispatcher, number_of_neurons=100)
     webcam = WebcamInterface()
     try:
         visual_cortex.receive_realtime_input(webcam)
