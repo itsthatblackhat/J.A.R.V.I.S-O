@@ -69,8 +69,9 @@ class VisualCortex:
 
     def preprocess_frame(self, frame):
         """Process and interpret raw frames."""
-        # Placeholder for frame processing and interpretation logic
-        return frame
+        # For demonstration, convert the frame to grayscale as a basic preprocessing step.
+        grayscale_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        return grayscale_frame
 
     def reset_all_neurons(self):
         for neuron_type in self.neurons:
