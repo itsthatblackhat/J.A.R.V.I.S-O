@@ -839,4 +839,58 @@ The `Synapses` directory contains implementations representing connections betwe
 
 
 
+### Utilities
+
+#### File Path:
+`Utils/`
+
+#### Overview:
+The `Utils` directory houses utility modules, which offer functionalities like data processing, visualization, feedback processing, and data loading.
+
+#### Files:
+
+1. **data_loader.py**:
+    - **Purpose**: Facilitates loading and preprocessing of various datasets and external inputs.
+    - **Classes**:
+        - **DataLoader**:
+            - **Variables**:
+                - `data_source`: The source or path of the data to be loaded.
+            - **Methods**:
+                - `load_data(self, data_path: str)`: Loads data from a specified path.
+                - `preprocess_data(self, data: Any)`: Conducts preprocessing on loaded data.
+
+2. **feedback_processor.py**:
+    - **Purpose**: Processes feedback from external systems or user interactions.
+    - **Classes**:
+        - **FeedbackProcessor**:
+            - **Variables**:
+                - `feedback_queue`: A queue holding feedback data to be processed.
+            - **Methods**:
+                - `process_feedback(self, feedback_data: dict)`: Analyzes feedback and adjusts the system accordingly.
+
+3. **signal_processing.py**:
+    - **Purpose**: Contains functionalities for processing various signals.
+    - **Classes**:
+        - **SignalProcessor**:
+            - **Variables**:
+                - `filter_bank`: Collection of filters to be applied on signals.
+            - **Methods**:
+                - `filter_signal(self, signal_data: list)`: Filters unwanted noise.
+                - `transform_signal(self, signal_data: list)`: Applies transformations for better processing.
+
+4. **visualization.py**:
+    - **Purpose**: Provides tools for visualizing data, neuron activations, etc.
+    - **Classes**:
+        - **Visualizer**:
+            - **Variables**:
+                - `canvas`: The drawing area for visualizations.
+            - **Methods**:
+                - `plot_data(self, data: list, title: str)`: Plots data with a given title.
+                - `display_image(self, image_path: str)`: Renders an image from a specified path.
+
+#### Connections:
+- The `DataLoader` often interfaces with the `NeuralDatabase` to retrieve or store preprocessed data.
+- `FeedbackProcessor` can send processed feedback to various brain regions for adaptive learning.
+- `SignalProcessor` might interact with neurons to process incoming signals and prepare them for neural processing.
+- `Visualizer` potentially uses output from various brain regions to visualize data or system states.
 
