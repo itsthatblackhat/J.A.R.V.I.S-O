@@ -74,6 +74,58 @@ The JarvisoBrain project is an ambitious endeavor to model the human brain's var
     - [feedback_processor.py](#feedback_processor.py)
     - [signal_processing.py](#signal_processing.py)
     - [visualization.py](#visualization.py)
+   
+
+
+
+### main_brain.py
+
+#### File Path:
+`JarvisoBrain/main_brain.py`
+
+#### Overview:
+The `main_brain.py` file serves as the primary entry point and orchestrator for the JarvisoBrain system. It initializes, coordinates, and manages the different components of the brain, ensuring seamless integration and functionality.
+
+#### Classes:
+
+1. **JarvisoBrain**:
+    - **Purpose**: Represents the entire brain system, integrating all components and managing their interactions.
+    - **Attributes**:
+        - `brain_regions`: A dictionary holding instances of all brain regions.
+        - `neurons`: A dictionary holding instances of different neuron types.
+        - `synapses`: A dictionary containing all the synapse types.
+        - `neuromodulatory_systems`: A collection of all neuromodulatory systems in the brain.
+        - `event_dispatcher`: An instance of the `EventDispatcher` class for event management.
+        - `database`: An instance of the database for long-term storage and retrieval of data.
+    - **Methods**:
+        - `initialize_brain(self)`: Sets up and initializes all brain components.
+        - `process_input(self, input_data: Any)`: Takes external inputs and processes them through the relevant brain regions.
+        - `retrieve_memory(self, query: str)`: Queries the database to retrieve specific memories or data.
+
+2. **BrainRegionInitializer**:
+    - **Purpose**: Assists in initializing all the brain regions and setting up their interconnections.
+    - **Methods**:
+        - `initialize_regions(self)`: Creates instances of all brain regions and ensures they're connected appropriately.
+
+#### Functions:
+- `main()`: The main execution function. When the file is run directly, it initializes the JarvisoBrain, simulates some inputs, and demonstrates various functionalities.
+
+#### Dependencies:
+- The `main_brain` heavily relies on the modules from the `BrainRegions`, `Neurons`, `Synapses`, `NeuromodulatorySystems`, and `BrainRoot` directories.
+- It also interfaces directly with the `NeuralDatabase` for data storage and retrieval.
+
+#### Connections:
+- **Brain Regions to Neurons**: Each brain region utilizes specific neuron types. For example, the `VisualCortex` communicates directly with `VisualNeurons`. The `initialize_brain` method sets up these connections during initialization.
+- **Brain Regions to Synapses**: Brain regions utilize synapses to manage neurotransmitter release and reception. The type of synapse is determined by the nature of the communication.
+- **Brain to Neuromodulatory Systems**: The `JarvisoBrain` integrates with various neuromodulatory systems to manage and adjust neurotransmitter levels based on stimuli, decisions, and other factors.
+- **Brain to Database**: The `JarvisoBrain` communicates with the `NeuralDatabase` for storing and retrieving memories, processed data, and other relevant information.
+
+#### Main Execution:
+When executed directly, `main_brain.py` sets up the entire JarvisoBrain system, simulates a series of events, processes inputs, and showcases the system's capabilities.
+
+
+
+
 
 ## BrainRegions
 
