@@ -203,13 +203,253 @@
 - **Connects To**: 
     - All Utils modules (For initialization)
 
+
+
+===================================================================================================
+
+
 ## Summary of To-Dos
 1. Implement methods in each BrainRegion for complete data flow.
+### Brainstem
+- `receive_sensory_data()`: To receive all types of sensory data from Sensory Neurons.
+- `receive_emotional_state()`: To get the emotional state from NeuromodulatorySystems.
+- `send_to_thalamus()`: To send refined sensory data to the Thalamus.
+
+### Cerebellum
+- `receive_motor_command()`: To receive motor commands from Motor Neurons.
+- `receive_sensory_feedback()`: To receive sensory feedback from Sensory Neurons.
+- `send_refined_motor_command()`: To send refined motor commands to Brainstem.
+
+### Hippocampus
+- `receive_from_thalamus()`: To receive consolidated sensory data from the Thalamus.
+- `store_long_term_memory()`: To write long-term memory data to `mainbrain.db` via MemoryManager.
+- `receive_emotional_context()`: To get emotional context from the NoradrenergicSystem.
+
+### Hypothalamus
+- `receive_emotional_state()`: To receive emotional and homeostatic states from NeuromodulatorySystems.
+- `send_to_thalamus()`: To send emotional and homeostatic state data to the Thalamus.
+- `receive_homeostatic_data()`: To receive sensory data related to homeostasis from the Brainstem.
+
+### PrefrontalCortex
+- `receive_auditory_data()`: To receive processed auditory signals from the Auditory Cortex.
+- `receive_visual_data()`: To receive processed visual signals from the Visual Cortex.
+- `store_long_term_plans()`: To store long-term plans in `mainbrain.db` via MemoryManager.
+- `send_decision_params()`: To send decision-making parameters to BasalGanglia.
+
+### SomatosensoryCortex
+- `receive_tactile_data()`: To receive tactile data from Sensory Neurons.
+- `send_to_thalamus()`: To send processed tactile data to the Thalamus.
+- `retrieve_past_tactile_data()`: To retrieve past tactile experiences from `mainbrain.db` via MemoryManager.
+
+### Thalamus
+- `receive_from_brainregions()`: To receive processed sensory data from all BrainRegions.
+- `send_to_hippocampus()`: To send data for memory consolidation to the Hippocampus.
+- `send_to_prefrontal_cortex()`: To send data for decision-making to the Prefrontal Cortex.
+
+### VisualCortex
+- `receive_raw_visual_data()`: To receive raw visual data from Sensory Neurons.
+- `send_to_thalamus()`: To send processed visual data to the Thalamus.
+- `retrieve_past_visual_data()`: To retrieve past visual data from `mainbrain.db` via MemoryManager.
+
+
+
+
 2. Establish the connection between different types of Neurons and Synapses.
+### Sensory Neurons
+- **Connected via Excitatory Synapses to**:
+  - Auditory Cortex: For auditory data.
+  - Visual Cortex: For visual data.
+  - Somatosensory Cortex: For tactile data.
+  
+- **Connected via Inhibitory Synapses to**:
+  - None: Generally, sensory neurons don't inhibit any other neurons directly.
+  
+### Motor Neurons
+- **Connected via Excitatory Synapses to**:
+  - Cerebellum: For refined motor commands.
+  
+- **Connected via Inhibitory Synapses to**:
+  - Interneurons: To regulate muscle contraction and relaxation.
+  
+### Interneurons
+- **Connected via Excitatory Synapses to**:
+  - Motor Neurons: To facilitate muscle contraction.
+  - Other Interneurons: For complex reflex loops and local circuits.
+  
+- **Connected via Inhibitory Synapses to**:
+  - Motor Neurons: To inhibit unwanted muscle contractions.
+  - Other Interneurons: To form inhibitory circuits and balance excitability.
+
+### Neuromodulatory Synapses
+- **Connected to**:
+  - All types of Neurons: To modulate the overall neural activity based on emotional states or other higher-level functions.
+  
+### Excitatory Synapses
+- **Found in**:
+  - Dopaminergic Synapse: Connects neurons in the DopamineSystem.
+  - Glutamatergic Synapse: Common in sensory pathways.
+
+### Inhibitory Synapses
+- **Found in**:
+  - GABAergic Synapse: Common in motor pathways to balance excitability.
+  - Glycinergic Synapse: Typically in the spinal cord and brainstem.
+  
+### Neuromodulatory Synapses
+- **Found in**:
+  - Noradrenergic Synapse: Connects neurons in the NoradrenergicSystem.
+  - Serotonergic Synapse: Connects neurons in the SerotoninSystem.
+
+
+
+
 3. Implement the NeuromodulatorySystems for emotional and reward-based feedback.
+### Comprehensive NeuromodulatorySystems Implementation Plan
+
+---
+
+#### Cholinergic System (Acetylcholine)
+- **Purpose**: To modulate attention, learning, and memory.
+  
+- **Methods Needed**:
+  1. `receive_attentional_focus()`: To get data from the Prefrontal Cortex.
+  2. `receive_learning_data()`: To get data from the Hippocampus.
+  3. `modulate_neurons()`: To send acetylcholine to target neurons.
+
+- **Data Structures**:
+  - Attentional Queue: To keep track of current attentional focus.
+  - Learning Matrix: To store learning variables and states.
+  
+- **Database Interactions**:
+  - Will read/write to `mainbrain.db` to store learning and memory variables.
+  
+- **Dependencies**:
+  - Prefrontal Cortex, Hippocampus, Main Database (`mainbrain.db`).
+
+---
+
+#### Dopamine System
+- **Purpose**: To manage reward-based learning, motivation, and pleasure.
+  
+- **Methods Needed**:
+  1. `receive_decision_outcome()`: To get outcomes from the Basal Ganglia.
+  2. `receive_expectations()`: To get planning data from the Prefrontal Cortex.
+  3. `modulate_reward_neurons()`: To send dopamine to neurons.
+
+- **Data Structures**:
+  - Reward Queue: To keep track of rewards and penalties.
+  - Expectation Matrix: To store expected outcomes.
+
+- **Database Interactions**:
+  - Will read/write to `mainbrain.db` to store rewards and expectations.
+  
+- **Dependencies**:
+  - Basal Ganglia, Prefrontal Cortex, Main Database (`mainbrain.db`).
+
+---
+
+#### Serotonin System
+- **Purpose**: To manage mood, emotion, and various physiological processes.
+  
+- **Methods Needed**:
+  1. `receive_emotional_state()`: To get emotional data from various brain regions.
+  2. `receive_basic_drives()`: To get basic physiological states from the Hypothalamus.
+  3. `modulate_emotional_neurons()`: To send serotonin to target neurons.
+
+- **Data Structures**:
+  - Emotional State Matrix: To store current emotional variables.
+  - Physiological State Queue: To keep track of basic drives like hunger and sleep.
+
+- **Database Interactions**:
+  - Will read/write to `mainbrain.db` to store emotional and physiological states.
+  
+- **Dependencies**:
+  - Hypothalamus, Auditory and Visual Cortices, Main Database (`mainbrain.db`).
+
+
+
+
 4. Complete the Utils for data loading, feedback processing, signal processing, and visualization.
+
+
+
 5. Ensure that all modules are connected to MemoryManager and EventManager appropriately for data storage and event triggering.
+### MemoryManager and EventManager: Detailed Connection and Implementation Plan
+
+---
+
+#### MemoryManager Connections
+
+1. **BrainRegions**
+    - **Required Tables in `mainbrain.db`:**
+        - AuditoryCortexData
+        - VisualCortexData
+        - BasalGangliaData
+        - ... (Each BrainRegion should have its own table)
+    - **Methods Required**: 
+        - `store_processed_data()`: Saves processed sensory data to the respective table.
+        - `retrieve_past_data()`: Fetches previous experiences from the respective table for contextual decisions.
+    - **Event Triggering**: 
+        - On data storage: Trigger `MEMORY_STORED` event.
+        - On data retrieval: Trigger `MEMORY_RETRIEVED` event.
+
+2. **NeuromodulatorySystems**
+    - **Required Tables in `mainbrain.db`:**
+        - DopamineSystemData
+        - SerotoninSystemData
+        - ... (Each NeuromodulatorySystem should have its own table)
+    - **Methods Required**: 
+        - `store_emotional_state()`: Saves current emotional state to the respective table.
+        - `retrieve_past_emotional_state()`: Fetches previous emotional states from the respective table.
+    - **Event Triggering**: 
+        - On emotional state change: Trigger `EMOTIONAL_STATE_CHANGED` event.
+        - On reward state change: Trigger `REWARD_STATE_CHANGED` event.
+
+3. **Neurons**
+    - **Required Tables in `mainbrain.db`:**
+        - InterneuronActivity
+        - MotorNeuronActivity
+        - SensoryNeuronActivity
+    - **Methods Required**: 
+        - `store_neuron_activity()`: Saves the current neuron firing patterns to the respective table.
+    - **Event Triggering**: 
+        - On neuron firing: Trigger `NEURON_FIRED` event.
+
+#### EventManager Connections
+
+1. **BrainRegions**
+    - **Events Listened For**: 
+        - `NEW_SENSORY_DATA`
+        - `EMOTIONAL_STATE_CHANGED`
+        - `MEMORY_RETRIEVED`
+    - **Events Triggered**: 
+        - `MEMORY_STORED`
+        - `MEMORY_RETRIEVED`
+  
+2. **NeuromodulatorySystems**
+    - **Events Listened For**: 
+        - `REWARD_RECEIVED`
+        - `PUNISHMENT_RECEIVED`
+    - **Events Triggered**: 
+        - `EMOTIONAL_STATE_CHANGED`
+        - `REWARD_STATE_CHANGED`
+
+3. **Neurons**
+    - **Events Listened For**: 
+        - `NEW_SENSORY_DATA`
+    - **Events Triggered**: 
+        - `NEURON_FIRED`
+
+4. **Synapses**
+    - **Events Listened For**: 
+        - `NEURON_FIRED`
+    - **Events Triggered**: 
+        - `SYNAPTIC_SIGNAL_SENT`
+
+
+
 6. Implement the `main_brain.py` to initialize and control all other modules.
+
+===================================================================================================
 
 ## Summary of Interactions
 1. BrainRoot acts as the central control, initializing all other modules.
