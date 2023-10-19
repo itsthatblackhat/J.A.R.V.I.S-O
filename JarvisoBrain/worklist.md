@@ -700,8 +700,109 @@ This class is an abstraction layer over the SQLite database. It's tailored for t
 
 # Neuromodulatory Systems
 
-Details about the neuromodulatory systems and their functionalities.
+#### Cholinergic System (`cholinergic_system.py`)
 
+The Cholinergic System in the brain primarily focuses on the modulation of acetylcholine, a neurotransmitter crucial for various cognitive functions. Within the context of JarvisoBrain, the `CholinergicSystem` class aims to emulate the neuromodulatory effects of the cholinergic system, providing mechanisms to influence neural activity based on acetylcholine dynamics.
+
+##### **Class: `CholinergicSystem`**
+
+This class represents the neuromodulatory effects of the cholinergic system within the neural network.
+
+- **Attributes**:
+  - **acetylcholine_level**: This attribute denotes the current concentration or level of acetylcholine within the system. The presence and concentration of acetylcholine can influence various neural functions, including attention, arousal, and memory.
+  - **parameters**: A set of configurations or specific parameters that guide the behavior and interactions of the cholinergic system. These could determine how acetylcholine is released, its interactions with neurons and synapses, and other dynamics.
+
+- **Methods**:
+  - **__init__(self, parameters)**: Initializes the cholinergic system with given parameters. It sets the default acetylcholine level and any other essential state attributes, ensuring the system is primed for interactions and modulation.
+  - **release_acetylcholine(self, amount)**: A method to emulate the release of acetylcholine into the neural environment. The specified amount determines how much acetylcholine is released, which could influence neural excitability, synaptic transmission, and other processes.
+  - **modulate_neuron(self, neuron)**: Given a specific neuron, this method alters its behavior or state based on the cholinergic dynamics. Such modulation can influence the neuron's firing rate, threshold, responsiveness, or other properties, potentially enhancing or inhibiting its activity.
+  - **interact_with_synapse(self, synapse)**: This method allows the cholinergic system to alter synaptic functions. Depending on the acetylcholine dynamics, this could influence synaptic plasticity, the strength of synaptic connections, neurotransmitter release, or other synaptic behaviors.
+  - **adjust_parameters(self, new_parameters)**: A utility method that provides the capability to dynamically change the parameters governing the cholinergic system. Such adaptability is essential for tuning the system, responding to feedback, or ensuring optimal neuromodulatory effects.
+
+##### **Functional Role and Interactions**:
+The cholinergic system, through its modulation of acetylcholine, plays a vital role in various brain functions and regions. Within JarvisoBrain:
+- It might have a significant influence on areas like the hippocampus, crucial for memory formation, storage, and recall.
+- It can dynamically influence attention mechanisms, ensuring the neural network can focus on specific tasks, inputs, or stimuli.
+- The system might have interactions with other neuromodulatory systems, ensuring a coordinated and balanced response to various inputs, challenges, or tasks.
+- Given its modulatory nature, the cholinergic system could play a role in learning, adaptation, and the neural network's overall responsiveness.
+
+
+
+
+#### Dopamine System (`dopamine_system.py`)
+
+Dopamine is a neurotransmitter that plays a pivotal role in reward, motivation, and various cognitive processes. The Dopamine System within JarvisoBrain is designed to emulate these neuromodulatory effects and influence the behavior of the neural network based on dopamine dynamics.
+
+##### **Class: `DopamineSystem`**
+
+This class represents the neuromodulatory effects of the dopamine system within the neural network.
+
+- **Attributes**:
+  - **dopamine_level**: Represents the current concentration or level of dopamine within the system. The presence and concentration of dopamine can influence various neural functions, especially those related to reward, motivation, and reinforcement learning.
+  - **parameters**: A set of configurations or specific parameters that guide the behavior and interactions of the dopamine system.
+
+- **Methods**:
+  - **__init__(self, parameters)**: Initializes the dopamine system with given parameters.
+  - **release_dopamine(self, amount)**: Emulates the release of dopamine into the neural environment.
+  - **modulate_neuron(self, neuron)**: Alters a given neuron's behavior based on dopamine dynamics.
+  - **interact_with_synapse(self, synapse)**: Allows the dopamine system to alter synaptic functions.
+  - **adjust_parameters(self, new_parameters)**: Provides the capability to dynamically change the parameters governing the dopamine system.
+
+##### **Functional Role and Interactions**:
+The dopamine system plays a vital role in various brain functions within JarvisoBrain:
+- Influences reward, reinforcement learning, and motivation mechanisms.
+- Dynamically modulates attention, mood, and arousal mechanisms.
+- Interacts with other neuromodulatory systems for coordinated neural responses.
+
+
+
+### Feedback Integration with Dopamine System
+
+The Dopamine System's primary function in the brain is to act as a reward signal, providing the brain (or in the case of JarvisoBrain, the neural network) with a mechanism to reinforce or discourage specific behaviors. The integration of the feedback system with the dopamine system allows for dynamic adjustments to the neural network's behavior based on external feedback.
+
+#### Dopamine and Reward Prediction Error
+
+Dopamine neurons in the brain are believed to encode the reward prediction error – the difference between expected and actual outcomes. This concept is central in reinforcement learning, where agents (or neural networks) learn by adjusting their predictions based on the error between expected and actual rewards.
+
+- **Good Feedback**:
+  - A surge in dopamine release, indicating a positive reward prediction error.
+  - Reinforces the neural pathways activated during that behavior, increasing the likelihood of their activation in similar future scenarios.
+  - Consistent positive feedback for a specific behavior strengthens the neural network's inclination towards that behavior.
+
+- **Bad Feedback**:
+  - Decrease in dopamine release, indicating a negative reward prediction error.
+  - Weakens the neural pathways associated with that behavior.
+  - Consistent negative feedback for a behavior teaches the neural network to avoid it.
+
+- **Neutral Feedback**:
+  - Dopamine levels may remain relatively stable.
+  - Doesn't strongly reinforce or weaken the neural pathways activated.
+  - Might lead to exploration of alternative behaviors.
+
+- **No Feedback**:
+  - Dopamine dynamics might encourage exploration of new behaviors.
+  - Tries to elicit feedback from the environment.
+
+#### Adaptive Learning with Feedback
+
+The integration of the feedback system with dopamine dynamics allows JarvisoBrain to adapt its behavior over time. This adaptive mechanism ensures the system:
+- Learns from its mistakes.
+- Reinforces beneficial behaviors.
+- Remains adaptable and refines its responses over time, similar to human learning processes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------------------------
 # Neurons
 
 Analysis of the different types of neurons and their implementation.
