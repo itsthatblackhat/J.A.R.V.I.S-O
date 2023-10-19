@@ -459,6 +459,204 @@ The `if __name__ == "__main__":` section provides a demonstration of how the `Th
 The `if __name__ == "__main__":` section provides a demonstration of how the `VisualCortex` class can be instantiated, how it processes real-time inputs from the webcam, and how to handle interruptions.
 
 
+----------------------------------------------------------------------------
+
+# Brain Root
+
+### Brain Message (`brain_message.py`)
+
+#### **Dependencies**:
+- **sqlite3**: Used for database operations.
+- **datetime**: Used to timestamp messages.
+- **enum**: Used for enumerating message types and processing directives.
+
+#### **Enum `MessageType`**:
+Enumerates the possible types of messages that can be sent within the system. Examples include:
+- Sensory Data
+- Processed Data
+- Memory Request/Response
+- Emotion Signal
+- Feedback
+- Neural Update
+- Interaction
+- ... and others.
+
+#### **Enum `ProcessingDirective`**:
+Enumerates the possible directives for processing a message. These dictate how the message should be handled. Examples include:
+- Immediate
+- Deferred
+- Store
+- Recall
+- Learn
+- Activate/Deactivate
+- ... and others.
+
+#### **Class `BrainMessage`**:
+- Represents a message that can be sent and received within the brain emulation.
+
+- **Attributes**:
+  - **message_type**: Type of the message (from `MessageType`).
+  - **data_payload**: The actual data or content of the message.
+  - **processing_directive**: How the message should be processed (from `ProcessingDirective`).
+  - **metadata**: Dictionary containing additional information such as timestamp, source, destination, priority, and context.
+
+- **Functions**:
+  - **get_message**: Returns the entire message as a dictionary.
+  - **save_to_db**: Saves the message to a SQLite database.
+  - **update_context**: Allows updating the context metadata of the message.
+  - **close**: Closes the database connection.
+
+The `if __name__ == "__main__":` section provides a demonstration of how the `BrainMessage` class can be instantiated and how to send a sample message from the Visual Cortex to the Prefrontal Cortex.
+
+
+ 
+ 
+ 
+ ### Brain Controller (`controller.py`)
+
+#### **Dependencies**:
+- Libraries: `enum`, `typing`.
+- Internal components from the JarvisoBrain project related to various brain regions, neurons, synapses, and neuromodulatory systems, among others.
+
+#### **Class `BrainController`**:
+
+- Serves as the central point of interaction and coordination for the brain emulation.
+
+- **Attributes**:
+  - **dispatcher**: An event dispatcher for handling events.
+  - **memory_manager**: Responsible for memory-related operations.
+  - **neural_database**: Access to the neural SQLite database.
+  - **sensory_neurons**: List of sensory neurons.
+  - **interneurons**: List of interneurons.
+  - **motor_neurons**: List of motor neurons.
+  - **brain_regions**: Dictionary containing instances of various brain regions.
+  - **neuromodulatory_systems**: Dictionary containing instances of various neuromodulatory systems.
+  - **feedback_processor**: Responsible for processing feedback.
+  - **user_history**: Tracks user interactions.
+  
+- **Functions**:
+  - **__init__**: Initializes various components, neurons, brain regions, and neuromodulatory systems.
+  - **init_brain_regions**: Initializes instances of various brain regions.
+  - **init_neuromodulatory_systems**: Initializes instances of various neuromodulatory systems.
+  - **interact_with_jarviso**: Accepts user input, processes it, and returns the output from the emulated brain.
+  - **process_neural_output_to_jarvis**: Converts neural outputs to a format understandable by the Jarvis interface.
+  - **process_through_interneurons**: A placeholder function to stimulate interneurons based on sensory input.
+  - **receive_feedback**: Accepts and processes feedback data.
+
+The `if __name__ == "__main__":` section provides a demonstration of how the `BrainController` class can be instantiated and how to interact with the emulated brain.
+
+ 
+ 
+### Event Manager (`event_manager.py`)
+
+#### **Dependencies**:
+- **sqlite3**: Used for database operations.
+- **datetime**: Used to timestamp events.
+- **enum**: Used for enumerating event types.
+
+#### **Enum `EventType`**:
+Enumerates the possible types of events that can be triggered within the system. Examples include:
+- NEW_AUDIO_INPUT
+- NEW_VISUAL_INPUT
+- NEW_TEXT_INPUT
+- SENSORY_INPUT
+- MEMORY_RECALL_REQUEST
+- MEMORY_STORE_REQUEST
+- PROCESSED_DATA_FROM_AUDITORY_CORTEX
+- PROCESSED_DATA_FROM_VISUAL_CORTEX
+- PROCESSED_DATA_FROM_PREFRONTAL_CORTEX
+- FEEDBACK
+- FEEDBACK_STORED
+- TRAINING_DATA_STORED
+- MOTOR_SIGNAL_ACTIVATED
+- NEW_SENSORY_INPUT
+- USER_INTERACTION
+- FEEDBACK_RECEIVED
+- NEURAL_UPDATE
+- PROCESSED_SENSORY_DATA
+
+#### **Class `Event`**:
+- Represents an event within the system.
+
+- **Attributes**:
+  - **event_type**: Type of the event (from `EventType`).
+  - **data**: The actual data or content associated with the event.
+  - **source**: The originator of the event.
+  - **target**: The intended recipient or handler of the event.
+  - **timestamp**: The time the event was created.
+
+- **Functions**:
+  - **save_to_db**: Saves the event to a SQLite database.
+
+#### **Class `EventDispatcher`**:
+- Manages the registration, unregistration, and dispatching of events to registered listeners.
+
+- **Attributes**:
+  - **listeners**: Dictionary containing lists of functions to call when a specific event type is dispatched.
+  - **db_path**: Path to the SQLite database where events can be stored.
+
+- **Functions**:
+  - **register_listener**: Registers a function to be called when a specific event type is dispatched.
+  - **unregister_listener**: Removes a previously registered listener.
+  - **dispatch**: Dispatches an event, triggering all registered listeners for that event type.
+
+The `if __name__ == "__main__":` section provides a demonstration of how to register a listener for the `NEW_AUDIO_INPUT` event type and dispatch an event of that type.
+
+ 
+
+
+### Memory Manager (`memory_manager.py`)
+
+#### **Dependencies**:
+- **sqlite3**: Used for database operations.
+- **datetime**: Used to timestamp events and interactions.
+- **logging**: Used for logging operations and error handling.
+- Internal components from the JarvisoBrain project related to events and messages.
+
+#### **Class `MemoryManager`**:
+- Manages operations related to memory.
+
+- **Attributes**:
+  - **db_path**: Path to the SQLite database.
+  - **dispatcher**: An instance of `EventDispatcher` for handling events.
+
+- **Functions**:
+  - **_connect**: Utility method to establish a database connection.
+  - **store_neuron_data**: Stores data related to a neuron in the database.
+  - **retrieve_neuron_data**: Retrieves data related to a neuron from the database.
+  - **log_interaction**: Stores an interaction (user input and Jarvis output) in the database. This function includes code to ensure that the interaction table exists and to log the interaction details, but the table structure and logging specifics might need further elaboration.
+  - Potential placeholders or comments indicating further methods for synaptic data, interaction logs, feedback, batch operations, and other memory-related operations.
+
+The `if __name__ == "__main__":` section demonstrates how to use the `MemoryManager` class, including how to store and retrieve neuron data.
+
+
+
+
+
+### Memory Manager (`memory_manager.py`)
+
+#### **Dependencies**:
+- **sqlite3**: This library facilitates operations with SQLite databases. The JarvisoBrain system appears to use an SQLite database to store and retrieve neural data, interactions, and possibly other entities.
+- **datetime**: Used to create timestamped records, ensuring each stored item or interaction can be tracked in chronological order.
+- **logging**: This standard library module provides flexible logging of messages to different outputs. In the context of `memory_manager.py`, it's likely used to log database operations, errors, and other significant events.
+- Internal components from the JarvisoBrain project related to events and messages, ensuring that memory operations can be triggered by or result in the dispatching of events/messages.
+
+#### **Class `MemoryManager`**:
+- Serves as a central component to manage all memory-related operations in the JarvisoBrain system.
+
+- **Attributes**:
+  - **db_path**: The path to the SQLite database. This is essential for the manager to know where to read from or write to.
+  - **dispatcher**: An instance of the `EventDispatcher` class, which manages the registration, unregistration, and dispatching of events. This indicates that memory operations might be event-driven.
+
+- **Functions**:
+  - **_connect**: A private utility method to establish a connection to the SQLite database. This ensures that each operation starts with an active database connection.
+  - **store_neuron_data**: A method to persist data related to a neuron in the database. This could include neuron states, activation levels, or other relevant data.
+  - **retrieve_neuron_data**: Retrieves specific data related to a neuron from the database, based on provided criteria.
+  - **log_interaction**: Stores user interactions, including user input and the corresponding Jarvis output, in the database. This archival can be crucial for feedback loops, learning, and improving system responses.
+  - Comments and placeholders hint at future or ongoing development, suggesting methods for handling synaptic data, more detailed interaction logs, feedback mechanisms, batch processing, and other memory-related functionalities.
+
+The `if __name__ == "__main__":` section offers a demonstration of the `MemoryManager` class's capabilities, illustrating how one might store and then retrieve neuron data.
+
 
 
 
@@ -479,9 +677,6 @@ The `if __name__ == "__main__":` section provides a demonstration of how the `Vi
 
 ----------------------------------------------------------------------------
 
-# Brain Root
-
-Insights about the core architecture and functionalities of the JarvisoBrain project.
 
 # Neural Database
 
