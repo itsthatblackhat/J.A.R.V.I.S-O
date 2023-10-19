@@ -658,18 +658,10 @@ The `if __name__ == "__main__":` section demonstrates how to use the `MemoryMana
 The `if __name__ == "__main__":` section offers a demonstration of the `MemoryManager` class's capabilities, illustrating how one might store and then retrieve neuron data.
 
 
+----------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
+# Neural Database
 
 
 
@@ -678,9 +670,6 @@ The `if __name__ == "__main__":` section offers a demonstration of the `MemoryMa
 ----------------------------------------------------------------------------
 
 
-# Neural Database
-
-Information about the database structures and CRUD operations.
 
 # Neuromodulatory Systems
 
