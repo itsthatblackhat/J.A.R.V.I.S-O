@@ -722,6 +722,8 @@ The Cholinergic System in the brain focuses on the modulation of acetylcholine, 
 - **Neutral Feedback**: Acetylcholine levels might remain stable, neither promoting nor inhibiting specific behaviors.
 - **No Feedback**: The system might increase acetylcholine levels temporarily to enhance attention and promote exploration of new behaviors.
 
+---
+
 #### Dopamine System (`dopamine_system.py`)
 
 Dopamine, crucial for reward-motivated behavior and several other brain functions, is the focus of the Dopaminergic System in JarvisoBrain.
@@ -745,6 +747,8 @@ Dopamine, crucial for reward-motivated behavior and several other brain function
 - **Bad Feedback**: Reduces dopamine levels or accelerates its degradation, discouraging certain actions.
 - **Neutral Feedback**: Dopamine levels might remain relatively stable.
 - **No Feedback**: The system might promote exploration of new behaviors by temporarily increasing dopamine levels.
+
+---
 
 #### Noradrenergic System (`noradrenergic_system.py`)
 
@@ -770,6 +774,8 @@ The Noradrenergic System, which revolves around norepinephrine, is essential for
 - **Neutral Feedback**: Norepinephrine levels might remain relatively stable.
 - **No Feedback**: The system could promote exploration by temporarily increasing norepinephrine levels.
 
+---
+
 #### Serotonin System (`serotonin_system.py`)
 
 The Serotonin System, centered around serotonin, affects mood, appetite, and sleep, among other functions.
@@ -793,8 +799,6 @@ The Serotonin System, centered around serotonin, affects mood, appetite, and sle
 - **Bad Feedback**: Might reduce serotonin levels, potentially leading to feelings of melancholy.
 - **Neutral Feedback**: Serotonin levels might remain relatively stable.
 - **No Feedback**: The system might try different behaviors to elicit feedback, adjusting serotonin levels to influence mood and receptiveness to new experiences.
-
-
 
 
 ----------------------------------------------------------------------------
