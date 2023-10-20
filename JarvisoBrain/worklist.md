@@ -1,3 +1,34 @@
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Core Features](#core-features)
+- [Neural Systems](#neural-systems)
+  - [Neurons](#neurons)
+  - [Synapses](#synapses)
+  - [Neurotransmitters](#neurotransmitters)
+  - [Neuromodulatory Systems](#neuromodulatory-systems)
+- [Memory Systems](#memory-systems)
+  - [Short-term Memory](#short-term-memory)
+  - [Long-term Memory](#long-term-memory)
+  - [Emotional Memory](#emotional-memory)
+- [Data Handling](#data-handling)
+  - [Sensory Data Handling](#sensory-data-handling)
+  - [OpenCV Data Handling](#opencv-data-handling)
+  - [Audio Data Handling](#audio-data-handling)
+  - [System Interaction](#system-interaction)
+- [Extendibility and Adaptability](#extendibility-and-adaptability)
+  - [Hardware Integration](#hardware-integration)
+  - [Software Integration](#software-integration)
+  - [Adaptive Learning with Extendibility](#adaptive-learning-with-extendibility)
+- [Event Management](#event-management)
+- [Feedback Systems](#feedback-systems)
+- [Communication Systems](#communication-systems)
+- [Emotion Systems](#emotion-systems)
+- [Decision Making](#decision-making)
+- [Database Connections](#database-connections)
+- [Security and Ethical Considerations](#security-and-ethical-considerations)
+
+
 # JarvisoBrain
 
 The JarvisoBrain project is an ambitious endeavor to model the human brain's various components and functionalities digitally. The architecture encompasses different brain regions, neurons, event management, memory storage, and neuromodulatory systems. This worklist.md provides a comprehensive overview of its structure, functionalities, and interactions.
