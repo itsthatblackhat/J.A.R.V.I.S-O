@@ -984,5 +984,81 @@ Provides a generic representation of inhibitory synapses, capturing their fundam
 ----------------------------------------------------------------------------
 # Utilities (Utils)
 
-Insights about the utility modules and their roles in the project.
+### Utils (Utilities)
 
+#### Data Loader (`data_loader.py`)
+
+The Data Loader utility is responsible for facilitating data ingestion into the JarvisoBrain system. It acts as the initial touchpoint for external data sources, ensuring that data is formatted, pre-processed, and relayed into the system for further processing and analysis.
+
+##### **Class: `DataLoader`**
+
+This class provides mechanisms to load, format, and preprocess data before it's ingested into the neural network.
+
+- **Attributes**:
+  - **data_source**: Indicates the source of the data being loaded, such as a file, database, or real-time stream.
+  - **formatted_data**: Holds the data after it has been processed and formatted for neural processing.
+  - **parameters**: Configuration parameters guiding how data is loaded, processed, and formatted.
+
+- **Methods**:
+  - **__init__(self, data_source, parameters)**: Initializes the data loader with a specified data source and configuration parameters.
+  - **load_data(self)**: Retrieves data from the specified source.
+  - **format_data(self)**: Processes and formats the loaded data to ensure it's suitable for neural processing.
+  - **get_formatted_data(self)**: Returns the processed and formatted data to be ingested by the neural network.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: If the loaded data consistently leads to positive outcomes, the parameters might be adjusted to prioritize similar data sources or processing techniques.
+- **Bad Feedback**: May result in revisiting the data formatting steps or reconsidering the data sources being used.
+- **Neutral Feedback**: Could lead to minor adjustments in data processing to explore potential improvements.
+- **No Feedback**: The system might explore alternative data sources or processing techniques to elicit feedback.
+
+#### Signal Processing (`signal_processing.py`)
+
+Signal Processing provides tools to process and analyze signals, which can be especially pertinent for sensory data like audio or visual signals. Proper signal processing ensures that the neural network receives clean, meaningful input.
+
+##### **Class: `SignalProcessor`**
+
+This class offers various methods to process and filter signals for optimal neural ingestion.
+
+- **Attributes**:
+  - **signal_data**: The raw signal data that needs to be processed.
+  - **processed_signal**: Holds the signal data after it has been processed.
+  - **parameters**: Configuration parameters guiding how signals are processed and filtered.
+
+- **Methods**:
+  - **__init__(self, signal_data, parameters)**: Initializes the signal processor with raw signal data and configuration parameters.
+  - **filter_signal(self)**: Applies various filters to remove noise or unwanted components from the signal.
+  - **transform_signal(self)**: Transforms the signal into a format or representation that's more suitable for neural processing, e.g., Fourier Transform.
+  - **get_processed_signal(self)**: Returns the processed signal for neural ingestion.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: If the processed signals consistently lead to positive outcomes, the parameters may be adjusted to prioritize specific filtering or transformation techniques.
+- **Bad Feedback**: Might result in revisiting the signal processing techniques or parameters.
+- **Neutral Feedback**: Could lead to minor adjustments in signal processing to explore potential enhancements.
+- **No Feedback**: The system might explore alternative processing techniques to elicit feedback.
+
+#### Visualization (`visualization.py`)
+
+Visualization tools are essential for understanding and interpreting the system's internal dynamics and outputs. It allows developers and users to visually inspect neural activities, outputs, and overall system behaviors.
+
+##### **Class: `Visualizer`**
+
+This class offers mechanisms to visualize various aspects of the JarvisoBrain system.
+
+- **Attributes**:
+  - **data**: The data that needs to be visualized.
+  - **visualization_type**: Specifies the type of visualization, e.g., plots, graphs, heatmaps, etc.
+  - **parameters**: Configuration parameters guiding how data is visualized.
+
+- **Methods**:
+  - **__init__(self, data, visualization_type, parameters)**: Initializes the visualizer with data, a specific visualization type, and configuration parameters.
+  - **generate_visualization(self)**: Creates a visual representation based on the specified type and parameters.
+  - **display(self)**: Displays or exports the generated visualization.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: If specific visualizations are found particularly useful or insightful, they might be prioritized or enhanced.
+- **Bad Feedback**: May lead to the reconsideration of visualization techniques or formats.
+- **Neutral Feedback**: Could lead to explorations of alternative visualization methods.
+- **No Feedback**: The system might try various visualization techniques to determine which is most informative or engaging.
