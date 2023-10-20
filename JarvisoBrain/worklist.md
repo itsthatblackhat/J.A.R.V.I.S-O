@@ -1307,3 +1307,94 @@ As Jarviso's "body" is essentially a combination of software and hardware compon
 - **Testing & Simulation**: Before integrating with a new component, Jarviso should be able to simulate its interactions with that component. This 'virtual integration testing' ensures that when actual integration happens, most potential issues have been addressed.
 
 - **Documentation & Training**: Every integration point should be well-documented. This not only aids in troubleshooting but also helps when adding new features or training Jarviso on new tasks.
+
+
+------------------------------------------------------------------------------------------
+Database Details
+------------------------------------------------------------------------------------------
+
+#### **Neural Database (`neuraldatabase.py`)**
+
+The `NeuralDatabase` acts as the storage and retrieval system for the JarvisoBrain. It stores memories, experiences, learned behaviors, and other essential data for the brain's functioning.
+
+##### **Database Tables**:
+
+1. **MemoryTable**:
+    - `memory_id`: Unique identifier for each memory.
+    - `timestamp`: Time when the memory was created or last accessed.
+    - `content`: Actual content or essence of the memory.
+    - `emotion_association`: Emotional state or feeling associated with the memory.
+
+2. **ExperienceTable**:
+    - `experience_id`: Unique identifier for each experience.
+    - `timestamp`: Time when the experience occurred.
+    - `content`: Details or description of the experience.
+    - `outcome`: Outcome or result of the experience.
+
+3. **BehaviorTable**:
+    - `behavior_id`: Unique identifier for each behavior.
+    - `trigger`: What prompts or triggers this behavior.
+    - `action`: The actual behavior or action taken.
+    - `frequency`: How often this behavior occurs.
+
+4. **LearningTable**:
+    - `learning_id`: Unique identifier for each learning instance.
+    - `content`: What was learned.
+    - `source`: Source or origin of the learning (e.g., experience, direct teaching).
+
+##### **Functional Role and Interactions**:
+
+- **Memory Storage and Retrieval**: The database provides mechanisms to store new memories and retrieve old ones based on specific criteria.
+- **Experience Logging**: Every new experience is logged in the ExperienceTable, with details about the event and its outcome.
+- **Behavior Tracking**: Behaviors, both innate and learned, are tracked in the BehaviorTable. This allows the system to recognize patterns and predict future behaviors.
+- **Continuous Learning**: As Jarviso interacts with the world and receives feedback, new learnings are stored in the LearningTable.
+
+---
+
+#### **OpenCV Integration (`opencv_integration.py`)**
+
+This module handles the integration of the JarvisoBrain with OpenCV for visual processing and interpretation.
+
+##### **Database Tables**:
+
+1. **VisualInputTable**:
+    - `input_id`: Unique identifier for each visual input.
+    - `timestamp`: Time when the input was received.
+    - `image_data`: Raw image data captured.
+    - `processed_data`: Image data after processing and interpretation.
+
+2. **ObjectRecognitionTable**:
+    - `recognition_id`: Unique identifier for each recognition instance.
+    - `input_id`: Reference to the associated visual input.
+    - `object`: Name or description of the recognized object.
+    - `confidence_level`: Confidence level of the recognition.
+
+##### **Functional Role and Interactions**:
+
+- **Visual Data Capture**: Captures visual data from cameras or other visual sensors and stores it in the VisualInputTable.
+- **Object Recognition**: Uses OpenCV's object recognition capabilities to identify objects in visual data and logs them in the ObjectRecognitionTable.
+
+---
+
+#### **Audio Processing (`audio_processing.py`)**
+
+This module deals with audio data capture, processing, and interpretation for JarvisoBrain.
+
+##### **Database Tables**:
+
+1. **AudioInputTable**:
+    - `input_id`: Unique identifier for each audio input.
+    - `timestamp`: Time when the input was received.
+    - `audio_data`: Raw audio data captured.
+    - `processed_data`: Audio data after processing and interpretation.
+
+2. **SpeechRecognitionTable**:
+    - `recognition_id`: Unique identifier for each recognition instance.
+    - `input_id`: Reference to the associated audio input.
+    - `transcript`: Transcription of the recognized speech.
+    - `confidence_level`: Confidence level of the recognition.
+
+##### **Functional Role and Interactions**:
+
+- **Audio Data Capture**: Captures audio data from microphones or other audio sensors and stores it in the AudioInputTable.
+- **Speech Recognition**: Converts spoken words into text and logs them in the SpeechRecognitionTable.
