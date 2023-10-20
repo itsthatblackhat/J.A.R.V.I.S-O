@@ -698,97 +698,276 @@ This class is an abstraction layer over the SQLite database. It's tailored for t
 
 ----------------------------------------------------------------------------
 
-# Neuromodulatory Systems
+### Neuromodulatory Systems
 
 #### Cholinergic System (`cholinergic_system.py`)
 
-The Cholinergic System in the brain primarily focuses on the modulation of acetylcholine, a neurotransmitter crucial for various cognitive functions. Within the context of JarvisoBrain, the `CholinergicSystem` class aims to emulate the neuromodulatory effects of the cholinergic system, providing mechanisms to influence neural activity based on acetylcholine dynamics.
-
-##### **Class: `CholinergicSystem`**
-
-This class represents the neuromodulatory effects of the cholinergic system within the neural network.
+The Cholinergic System in the brain focuses on the modulation of acetylcholine, a neurotransmitter essential for various cognitive functions. Within JarvisoBrain, the `CholinergicSystem` class emulates the neuromodulatory effects of the cholinergic system, offering mechanisms to influence neural activity based on acetylcholine dynamics.
 
 - **Attributes**:
-  - **acetylcholine_level**: This attribute denotes the current concentration or level of acetylcholine within the system. The presence and concentration of acetylcholine can influence various neural functions, including attention, arousal, and memory.
-  - **parameters**: A set of configurations or specific parameters that guide the behavior and interactions of the cholinergic system. These could determine how acetylcholine is released, its interactions with neurons and synapses, and other dynamics.
+  - **acetylcholine_level**: Represents the current acetylcholine concentration within the system, influencing various neural functions, including attention, arousal, and memory.
+  - **parameters**: Configurations guiding the behavior and interactions of the cholinergic system.
 
 - **Methods**:
-  - **__init__(self, parameters)**: Initializes the cholinergic system with given parameters. It sets the default acetylcholine level and any other essential state attributes, ensuring the system is primed for interactions and modulation.
-  - **release_acetylcholine(self, amount)**: A method to emulate the release of acetylcholine into the neural environment. The specified amount determines how much acetylcholine is released, which could influence neural excitability, synaptic transmission, and other processes.
-  - **modulate_neuron(self, neuron)**: Given a specific neuron, this method alters its behavior or state based on the cholinergic dynamics. Such modulation can influence the neuron's firing rate, threshold, responsiveness, or other properties, potentially enhancing or inhibiting its activity.
-  - **interact_with_synapse(self, synapse)**: This method allows the cholinergic system to alter synaptic functions. Depending on the acetylcholine dynamics, this could influence synaptic plasticity, the strength of synaptic connections, neurotransmitter release, or other synaptic behaviors.
-  - **adjust_parameters(self, new_parameters)**: A utility method that provides the capability to dynamically change the parameters governing the cholinergic system. Such adaptability is essential for tuning the system, responding to feedback, or ensuring optimal neuromodulatory effects.
+  - **__init__(self, parameters)**: Initializes the system with given parameters.
+  - **release_acetylcholine(self, amount)**: Emulates acetylcholine release.
+  - **modulate_neuron(self, neuron)**: Alters neuron behavior based on cholinergic dynamics.
+  - **interact_with_synapse(self, synapse)**: Alters synaptic functions based on cholinergic dynamics.
+  - **adjust_parameters(self, new_parameters)**: Dynamically changes the system's governing parameters.
 
-##### **Functional Role and Interactions**:
-The cholinergic system, through its modulation of acetylcholine, plays a vital role in various brain functions and regions. Within JarvisoBrain:
-- It might have a significant influence on areas like the hippocampus, crucial for memory formation, storage, and recall.
-- It can dynamically influence attention mechanisms, ensuring the neural network can focus on specific tasks, inputs, or stimuli.
-- The system might have interactions with other neuromodulatory systems, ensuring a coordinated and balanced response to various inputs, challenges, or tasks.
-- Given its modulatory nature, the cholinergic system could play a role in learning, adaptation, and the neural network's overall responsiveness.
+##### Feedback Mechanism:
 
-
-
+- **Good Feedback**: Might lead to an increased release of acetylcholine, reinforcing attention and learning processes.
+- **Bad Feedback**: Could inhibit acetylcholine release or accelerate its degradation, potentially leading to decreased attention or learning capabilities.
+- **Neutral Feedback**: Acetylcholine levels might remain stable, neither promoting nor inhibiting specific behaviors.
+- **No Feedback**: The system might increase acetylcholine levels temporarily to enhance attention and promote exploration of new behaviors.
 
 #### Dopamine System (`dopamine_system.py`)
 
-Dopamine is a neurotransmitter that plays a pivotal role in reward, motivation, and various cognitive processes. The Dopamine System within JarvisoBrain is designed to emulate these neuromodulatory effects and influence the behavior of the neural network based on dopamine dynamics.
+Dopamine, crucial for reward-motivated behavior and several other brain functions, is the focus of the Dopaminergic System in JarvisoBrain.
 
 ##### **Class: `DopamineSystem`**
 
-This class represents the neuromodulatory effects of the dopamine system within the neural network.
-
 - **Attributes**:
-  - **dopamine_level**: Represents the current concentration or level of dopamine within the system. The presence and concentration of dopamine can influence various neural functions, especially those related to reward, motivation, and reinforcement learning.
-  - **parameters**: A set of configurations or specific parameters that guide the behavior and interactions of the dopamine system.
+  - **dopamine_level**: Represents the current dopamine concentration in the system.
+  - **parameters**: Configurations guiding the behavior and interactions of the dopamine system.
 
 - **Methods**:
-  - **__init__(self, parameters)**: Initializes the dopamine system with given parameters.
-  - **release_dopamine(self, amount)**: Emulates the release of dopamine into the neural environment.
-  - **modulate_neuron(self, neuron)**: Alters a given neuron's behavior based on dopamine dynamics.
-  - **interact_with_synapse(self, synapse)**: Allows the dopamine system to alter synaptic functions.
-  - **adjust_parameters(self, new_parameters)**: Provides the capability to dynamically change the parameters governing the dopamine system.
+  - **__init__(self, parameters)**: Initializes the system with given parameters.
+  - **release_dopamine(self, amount)**: Emulates dopamine release.
+  - **modulate_neuron(self, neuron)**: Alters neuron behavior based on dopamine dynamics.
+  - **interact_with_synapse(self, synapse)**: Alters synaptic functions based on dopamine dynamics.
+  - **adjust_parameters(self, new_parameters)**: Dynamically changes the system's governing parameters.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: Leads to increased dopamine release, reinforcing reward-seeking behaviors.
+- **Bad Feedback**: Reduces dopamine levels or accelerates its degradation, discouraging certain actions.
+- **Neutral Feedback**: Dopamine levels might remain relatively stable.
+- **No Feedback**: The system might promote exploration of new behaviors by temporarily increasing dopamine levels.
+
+#### Noradrenergic System (`noradrenergic_system.py`)
+
+The Noradrenergic System, which revolves around norepinephrine, is essential for attentiveness, emotions, and other functions.
+
+##### **Class: `NoradrenergicSystem`**
+
+- **Attributes**:
+  - **norepinephrine_level**: Represents the current norepinephrine concentration in the system.
+  - **parameters**: Configurations guiding the behavior and interactions of the noradrenergic system.
+
+- **Methods**:
+  - **__init__(self, parameters)**: Initializes the system with given parameters.
+  - **release_norepinephrine(self, amount)**: Emulates norepinephrine release.
+  - **modulate_neuron(self, neuron)**: Alters neuron behavior based on noradrenergic dynamics.
+  - **interact_with_synapse(self, synapse)**: Alters synaptic functions based on noradrenergic dynamics.
+  - **adjust_parameters(self, new_parameters)**: Dynamically changes the system's governing parameters.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: Might increase norepinephrine release, bolstering attention and alertness.
+- **Bad Feedback**: Might decrease norepinephrine levels, potentially inducing relaxation or reduced attention.
+- **Neutral Feedback**: Norepinephrine levels might remain relatively stable.
+- **No Feedback**: The system could promote exploration by temporarily increasing norepinephrine levels.
+
+#### Serotonin System (`serotonin_system.py`)
+
+The Serotonin System, centered around serotonin, affects mood, appetite, and sleep, among other functions.
+
+##### **Class: `SerotoninSystem`**
+
+- **Attributes**:
+  - **serotonin_level**: Represents the current serotonin concentration.
+  - **parameters**: Configurations guiding the behavior and interactions of the serotonin system.
+
+- **Methods**:
+  - **__init__(self, parameters)**: Initializes the system with given parameters.
+  - **release_serotonin(self, amount)**: Emulates serotonin release.
+  - **modulate_neuron(self, neuron)**: Alters neuron behavior based on serotonin dynamics.
+  - **interact_with_synapse(self, synapse)**: Alters synaptic functions based on serotonin dynamics.
+  - **adjust_parameters(self, new_parameters)**: Dynamically changes the system's governing parameters.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: Could increase serotonin release, promoting positive mood and well-being.
+- **Bad Feedback**: Might reduce serotonin levels, potentially leading to feelings of melancholy.
+- **Neutral Feedback**: Serotonin levels might remain relatively stable.
+- **No Feedback**: The system might try different behaviors to elicit feedback, adjusting serotonin levels to influence mood and receptiveness to new experiences.
+
+
+
+
+----------------------------------------------------------------------------
+# Neurons
+
+
+#### Interneurons (`interneurons.py`)
+
+Interneurons are essential components within neural networks, especially in sophisticated organisms like humans. They function primarily as connectors and modulators, not directly interfacing with external sensory organs or muscles. Instead, they create intricate networks with other neurons, ensuring precise signal processing and transmission for refined, coordinated responses to various stimuli.
+
+##### **Class: `Interneuron`**
+
+This class encapsulates the behavior, properties, and dynamics of an interneuron.
+
+- **Attributes**:
+  - **state**: Represents the neuron's operational condition, dictating whether it's currently firing or not.
+  - **connectivity**: Details the neuron's connections, dictating its role in the larger network.
+  - **parameters**: Governing rules or configurations, including firing thresholds, refractory periods, and signal propagation speeds.
+
+- **Methods**:
+  - **__init__(self, state, connectivity, parameters)**: Sets up the neuron's initial state, connections, and governing parameters.
+  - **fire(self)**: Simulates the neuron's primary function of firing, determining its signaling behavior.
+  - **connect(self, neuron)**: Allows dynamic neural network adjustments by forming new connections.
+  - **disconnect(self, neuron)**: Severs existing connections, essential for network pruning or eliminating undesired pathways.
+  
+##### **Functional Role and Interactions**:
+
+Interneurons play diverse and intricate roles within JarvisoBrain:
+- **Signal Refinement**: They refine signals from sensory neurons, ensuring potent and relevant signal propagation.
+- **Coordination and Timing**: Through their connections, interneurons coordinate signals for harmonious network activation.
+- **Learning and Adaptation**: Dynamic connectivity, influenced by feedback or intrinsic factors, allows these neurons to facilitate network learning and adaptation. Connections can strengthen or weaken based on usage.
+- **Complex Processing**: Interneurons contribute to advanced neural functions like pattern recognition, memory formation, and decision-making processes.
+
+
+
+#### Motor Neurons (`motor_neurons.py`)
+
+Motor neurons, traditionally known for transmitting commands from the CNS to muscles, have an expanded role in JarvisoBrain. They interface with digital components and software libraries, emulating the motor actions required to adjust sensory organs in a human.
+
+##### **Class: `MotorNeuron`**
+
+This class emulates motor neurons' behavior and properties, covering both their traditional role and their new role of interfacing with software libraries and devices.
+
+- **Attributes**:
+  - **state**: Represents the current activity state.
+  - **connectivity**: Specifies connections to other neurons, software libraries, or devices.
+  - **parameters**: Configurations dictating behavior and dynamics.
+  
+- **Methods**:
+  - **__init__(self, state, connectivity, parameters)**: Initialization method.
+  - **fire(self)**: Simulates neuron firing, potentially activating a software function or adjusting a device.
+  - **connect(self, neuron_or_device)**: Establishes connections.
+  - **disconnect(self, neuron_or_device)**: Removes connections.
 
 ##### **Functional Role and Interactions**:
-The dopamine system plays a vital role in various brain functions within JarvisoBrain:
-- Influences reward, reinforcement learning, and motivation mechanisms.
-- Dynamically modulates attention, mood, and arousal mechanisms.
-- Interacts with other neuromodulatory systems for coordinated neural responses.
+- **Interfacing with OpenCV**: Motor neurons can interface with OpenCV to control visual inputs, adjusting parameters like focus, brightness, or field of view.
+- **Audio Control**: Motor neurons can interface with audio libraries to control listening parameters, filtering noise, amplifying signals, or focusing on specific audio sources.
+- **Software Control**: They can trigger or adjust algorithms or processes based on the neural network's needs.
+- **Integration with Sensory Systems**: Motor neurons adjust inputs based on sensory feedback, optimizing data capture or processing.
 
 
 
-### Feedback Integration with Dopamine System
 
-The Dopamine System's primary function in the brain is to act as a reward signal, providing the brain (or in the case of JarvisoBrain, the neural network) with a mechanism to reinforce or discourage specific behaviors. The integration of the feedback system with the dopamine system allows for dynamic adjustments to the neural network's behavior based on external feedback.
 
-#### Dopamine and Reward Prediction Error
 
-Dopamine neurons in the brain are believed to encode the reward prediction error – the difference between expected and actual outcomes. This concept is central in reinforcement learning, where agents (or neural networks) learn by adjusting their predictions based on the error between expected and actual rewards.
 
-- **Good Feedback**:
-  - A surge in dopamine release, indicating a positive reward prediction error.
-  - Reinforces the neural pathways activated during that behavior, increasing the likelihood of their activation in similar future scenarios.
-  - Consistent positive feedback for a specific behavior strengthens the neural network's inclination towards that behavior.
 
-- **Bad Feedback**:
-  - Decrease in dopamine release, indicating a negative reward prediction error.
-  - Weakens the neural pathways associated with that behavior.
-  - Consistent negative feedback for a behavior teaches the neural network to avoid it.
 
-- **Neutral Feedback**:
-  - Dopamine levels may remain relatively stable.
-  - Doesn't strongly reinforce or weaken the neural pathways activated.
-  - Might lead to exploration of alternative behaviors.
 
-- **No Feedback**:
-  - Dopamine dynamics might encourage exploration of new behaviors.
-  - Tries to elicit feedback from the environment.
+----------------------------------------------------------------------------
+# Synapses
 
-#### Adaptive Learning with Feedback
 
-The integration of the feedback system with dopamine dynamics allows JarvisoBrain to adapt its behavior over time. This adaptive mechanism ensures the system:
-- Learns from its mistakes.
-- Reinforces beneficial behaviors.
-- Remains adaptable and refines its responses over time, similar to human learning processes.
+### Excitatory Synapses
+
+Excitatory synapses facilitate the generation of action potentials in the post-synaptic neuron, amplifying its activity. They release neurotransmitters that typically cause the depolarization of the post-synaptic membrane, moving the neuron closer to the threshold for firing an action potential.
+
+#### 1. `dopaminergic_synapse.py`
+
+This module models synapses that release dopamine, a neurotransmitter linked with pleasure, reward, and motor functions.
+
+##### **Class: `DopaminergicSynapse`**
+- **Attributes**:
+  - **strength (float)**: Represents the efficacy of the synapse in transmitting signals.
+  - **location (tuple)**: Specifies the (x, y, z) coordinates indicating the synapse's position in the neural network.
+
+- **Methods**:
+  - **transmit(self) -> None**: Emulates the transmission of dopamine, impacting other synapses and their neurotransmission.
+  - **modulate_strength(self, factor: float) -> None**: Adjusts the synapse's strength based on the provided factor.
+
+#### 2. `excitatory_synapses.py`
+
+Provides a generic representation of excitatory synapses, capturing their fundamental behavior.
+
+##### **Class: `ExcitatorySynapse`**
+- **Attributes**:
+  - **strength (float)**: Denotes the synapse's efficacy.
+  - **neurotransmitter (str)**: Specifies the particular neurotransmitter released by the synapse.
+
+- **Methods**:
+  - **transmit(self) -> None**: Emulates signal transmission, amplifying the post-synaptic neuron's effects.
+  - **modulate_strength(self, factor: float) -> None**: Enables dynamic adjustments in synaptic efficacy based on the provided factor.
+
+#### 3. `glutamatergic_synapse.py`
+
+Models synapses that release glutamate, the primary excitatory neurotransmitter in the brain.
+
+##### **Class: `GlutamatergicSynapse`**
+- **Attributes**:
+  - **strength (float)**: Represents the synapse's efficacy.
+  - **location (tuple)**: Denotes the (x, y, z) coordinates indicating the synapse's position within the neural network.
+
+- **Methods**:
+  - **transmit(self) -> None**: Emulates glutamate transmission across the synapse, influencing other synapses.
+  - **modulate_strength(self, factor: float) -> None**: Adjusts the synapse's strength based on various factors.
+
+
+
+### Inhibitory Synapses
+
+Inhibitory synapses decrease the likelihood that a neuron will fire an action potential. They generally work by making the inside of the neuron more negative, counteracting the positive effects of the excitatory synapses.
+
+#### 1. `cholinergic_synapse.py`
+
+This module models synapses that release acetylcholine, which can have both excitatory and inhibitory effects depending on the receptors involved. However, in the context of this module, it's considered inhibitory.
+
+##### **Class: `CholinergicSynapse`**
+- **Attributes**:
+  - **strength (float)**: Represents the efficacy of the synapse in transmitting signals.
+  - **location (tuple)**: Specifies the (x, y, z) coordinates that indicate the synapse's position in the neural network.
+
+- **Methods**:
+  - **transmit(self) -> None**: Emulates the transmission of acetylcholine, influencing other synapses and their neurotransmission.
+  - **modulate_strength(self, factor: float) -> None**: Adjusts the synapse's strength based on the provided factor.
+
+#### 2. `gabaergic_synapse.py`
+
+This module models synapses that release GABA (Gamma Aminobutyric Acid), the primary inhibitory neurotransmitter in the mammalian central nervous system.
+
+##### **Class: `GABAergicSynapse`**
+- **Attributes**:
+  - **strength (float)**: Denotes the synapse's efficacy.
+  - **location (tuple)**: Specifies the (x, y, z) coordinates that indicate the synapse's position within the neural network.
+
+- **Methods**:
+  - **transmit(self) -> None**: Emulates the transmission of GABA, inhibiting neural activity.
+  - **modulate_strength(self, factor: float) -> None**: Adjusts the synapse's strength based on the given factor.
+
+#### 3. `glycinergic_synapse.py`
+
+This module models synapses that release glycine, another inhibitory neurotransmitter found in the nervous system.
+
+##### **Class: `GlycinergicSynapse`**
+- **Attributes**:
+  - **strength (float)**: Represents the efficacy of the synapse in transmitting signals.
+  - **location (tuple)**: Specifies the (x, y, z) coordinates indicating the synapse's position in the neural network.
+
+- **Methods**:
+  - **transmit(self) -> None**: Emulates the transmission of glycine, inhibiting neural activity.
+  - **modulate_strength(self, factor: float) -> None**: Adjusts the synapse's strength based on various factors.
+
+#### 4. `inhibitory_synapses.py`
+
+Provides a generic representation of inhibitory synapses, capturing their fundamental behavior.
+
+##### **Class: `InhibitorySynapse`**
+- **Attributes**:
+  - **strength (float)**: Denotes the synapse's efficacy.
+  - **neurotransmitter (str)**: Specifies the particular neurotransmitter released by the synapse.
+
+- **Methods**:
+  - **transmit(self) -> None**: Emulates signal transmission, inhibiting the post-synaptic neuron's effects.
+  - **modulate_strength(self, factor: float) -> None**: Enables dynamic adjustments in synaptic efficacy based on the provided factor.
 
 
 
@@ -803,14 +982,6 @@ The integration of the feedback system with dopamine dynamics allows JarvisoBrai
 
 
 ----------------------------------------------------------------------------
-# Neurons
-
-Analysis of the different types of neurons and their implementation.
-
-# Synapses
-
-Details about the synapses, their types, and functionalities.
-
 # Utilities (Utils)
 
 Insights about the utility modules and their roles in the project.
