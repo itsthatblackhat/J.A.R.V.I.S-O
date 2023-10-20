@@ -887,13 +887,89 @@ This class emulates motor neurons' behavior and properties, covering both their 
 - **Integration with Sensory Systems**: Motor neurons adjust inputs based on sensory feedback, optimizing data capture or processing.
 
 
+### Sensory Neurons (`sensory_neurons.py`)
+
+Sensory neurons in JarvisoBrain are designed to act as the primary interface between the environment and the neural network, much like how sensory neurons in humans capture external stimuli and transmit them to the central nervous system. These neurons are pivotal in providing the system with a diverse range of inputs, allowing JarvisoBrain to understand and respond to its environment.
+
+#### **Attributes**:
+- **state**: Represents the neuron's current operational state, which can be 'active' or 'inactive'. Determines if the neuron is currently transmitting data.
+- **source**: Specifies the origin of sensory input. Examples include 'visual', 'auditory', 'tactile', and others.
+- **data**: Holds the sensory input data that the neuron is processing.
+
+#### **Methods**:
+- **__init__(self, source)**: Initializes the neuron based on the given sensory input source.
+- **capture_data(self)**: Captures data from the specified source.
+- **process_data(self)**: Processes the captured data, potentially leveraging libraries like OpenCV for visual data.
+- **transmit_data(self)**: Sends the processed data to the interconnected neurons or processing centers.
+
+### OpenCV Data Handling
+
+Given the importance of visual inputs, JarvisoBrain utilizes OpenCV, a powerful computer vision library, to process and understand visual stimuli. The visual sensory neurons specifically use OpenCV functionalities to capture, analyze, and interpret visual data.
+
+#### **Database Connections**:
+- **Table `opencv_visual_data`**: Stores raw and processed visual data.
+  - **Fields**: `id`, `timestamp`, `raw_data`, `processed_data`, `analysis_results`.
+  - **Relations**: Can be linked to memory storage for recall of specific visual memories or events.
+
+#### **Functional Role and Interactions**:
+
+- **Data Acquisition**: Visual sensory neurons capture raw visual data, which might come from cameras, video feeds, or any visual sensors connected to JarvisoBrain.
+  
+- **Data Processing with OpenCV**: Once captured, the raw visual data undergoes processing using OpenCV. This can include tasks like object detection, face recognition, scene segmentation, and more.
+  
+- **Data Storage**: Post-processing, the data (both raw and processed) can be stored in the `opencv_visual_data` table for future recall or analysis.
+  
+- **Interactions with Other Systems**: The processed visual data can influence other systems in JarvisoBrain. For instance, recognizing a familiar face might trigger the Emotion System, or spotting a specific object might lead to a relevant memory being recalled.
 
 
+### Audio Data Handling
+
+For audio processing, the database would focus on storing raw audio data, processed data, and identified features or patterns.
+
+#### **Database Schemas**:
+
+1. **AudioInputs**:
+   - `ID`: Unique identifier for each audio input.
+   - `RawAudio`: Raw audio waveform data.
+   - `ProcessedData`: Data after initial processing, like a spectrogram.
+   - `Timestamp`: Timestamp of when the data was received.
+
+2. **AudioFeatures**:
+   - `ID`: Unique identifier for each identified audio feature.
+   - `FeatureType`: Type of the feature (pitch, rhythm, voice, noise, etc.).
+   - `TimestampRange`: Start and end timestamps of the feature in the audio clip.
+   - `Details`: Any additional details or metadata about the feature.
+
+3. **AudioLogs**:
+   - `ID`: Unique identifier for each log entry.
+   - `LogType`: Type of the log (voice recognition, noise detection, etc.).
+   - `Details`: Detailed description or data related to the log.
+   - `Timestamp`: Timestamp of the log event.
 
 
+### System Interaction Data
 
+This section deals with how Jarviso interacts with the system, including sending commands, receiving data, and more.
 
+#### **Database Schemas**:
 
+1. **SystemCommands**:
+   - `ID`: Unique identifier for each command.
+   - `CommandType`: Type of the command (open app, shut down, write data, etc.).
+   - `CommandDetails`: Specific details about the command.
+   - `Timestamp`: Timestamp of when the command was initiated.
+
+2. **SystemFeedback**:
+   - `ID`: Unique identifier for each feedback entry.
+   - `FeedbackType`: Type of feedback (error, success, warning, etc.).
+   - `Details`: Detailed description or data related to the feedback.
+   - `Timestamp`: Timestamp of when the feedback was received.
+
+3. **SystemLogs**:
+   - `ID`: Unique identifier for each log entry.
+   - `LogType`: Type of the log (system start, system error, data write, etc.).
+   - `Details`: Detailed description or data related to the log.
+   - `Timestamp`: Timestamp of the log event.
 
 ----------------------------------------------------------------------------
 # Synapses
@@ -1342,12 +1418,62 @@ The `NeuralDatabase` acts as the storage and retrieval system for the JarvisoBra
     - `content`: What was learned.
     - `source`: Source or origin of the learning (e.g., experience, direct teaching).
 
-##### **Functional Role and Interactions**:
+### **Functional Role and Interactions**:
 
 - **Memory Storage and Retrieval**: The database provides mechanisms to store new memories and retrieve old ones based on specific criteria.
 - **Experience Logging**: Every new experience is logged in the ExperienceTable, with details about the event and its outcome.
 - **Behavior Tracking**: Behaviors, both innate and learned, are tracked in the BehaviorTable. This allows the system to recognize patterns and predict future behaviors.
 - **Continuous Learning**: As Jarviso interacts with the world and receives feedback, new learnings are stored in the LearningTable.
+
+### **Database Connections**:
+Database connections will be managed using a robust database connection manager. This tool will ensure that multiple connections can be handled simultaneously without overloading the system. 
+
+#### **Database Schemas**:
+
+1. **Neurons**:
+   - `ID`: Unique identifier for each neuron.
+   - `Type`: Type of the neuron (sensory, motor, interneuron, etc.).
+   - `State`: Current state of the neuron (active, dormant, etc.).
+   - `LastActivationTimestamp`: Timestamp of the last activation.
+   - `ConnectedNeurons`: List of neurons this neuron is connected to.
+
+2. **Synapses**:
+   - `ID`: Unique identifier for each synapse.
+   - `NeuronA`: One of the connecting neurons.
+   - `NeuronB`: The other connecting neuron.
+   - `Strength`: Strength of the connection.
+   - `LastModifiedTimestamp`: Timestamp of the last modification.
+
+3. **Neuromodulators**:
+   - `ID`: Unique identifier for each neuromodulator.
+   - `Type`: Type of the neuromodulator (dopamine, serotonin, etc.).
+   - `CurrentLevel`: Current level of the neuromodulator in the system.
+   - `LastModifiedTimestamp`: Timestamp of the last modification.
+
+4. **ExternalInputs** (for sensory data):
+   - `ID`: Unique identifier for each external input.
+   - `Type`: Type of the input (audio, visual, tactile, etc.).
+   - `Data`: Raw data from the input.
+   - `Timestamp`: Timestamp of when the data was received.
+
+5. **Feedback**:
+   - `ID`: Unique identifier for each feedback entry.
+   - `MessageType`: Type of the message (good, neutral, bad, nonresponse).
+   - `MessageContent`: Content or details of the feedback.
+   - `Timestamp`: Timestamp of when the feedback was received.
+
+6. **EventLogs**:
+   - `ID`: Unique identifier for each log entry.
+   - `EventType`: Type of the event (neuron activation, synapse modification, etc.).
+   - `Details`: Detailed description or data related to the event.
+   - `Timestamp`: Timestamp of the event.
+
+7. **MotorActions** (for motor neuron outputs):
+   - `ID`: Unique identifier for each action.
+   - `Type`: Type of the action (move left, speak, etc.).
+   - `ActionDetails`: Specific details about the action.
+   - `Timestamp`: Timestamp of when the action was initiated.
+
 
 ---
 
