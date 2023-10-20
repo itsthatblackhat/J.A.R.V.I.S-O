@@ -1,4 +1,23 @@
-# JarvisoBrain Development Notes
+# JarvisoBra
+
+### Hardware Integration
+
+JarvisoBrain's neural structures should be deeply integrated with the available hardware. This integration will make it aware of its "physical" capabilities and limitations, much like a human brain is aware of its body's capabilities and limitations.
+
+#### Sensory Systems:
+- **Visual System (OpenCV)**: Should be integrated with the sensory neurons, especially those responsible for visual input. This would allow JarvisoBrain to "see" its surroundings.
+- **Auditory System (Microphone Integration)**: Sensory neurons responsible for auditory input should be connected to the system's microphone, enabling JarvisoBrain to "hear".
+- **Tactile System (Touch Sensors)**: If touch sensors are available, sensory neurons should be able to process tactile input, letting JarvisoBrain "feel" physical interactions.
+
+#### Motor Systems:
+- **Visual Output (Display Systems)**: Motor neurons can stimulate visual displays, allowing JarvisoBrain to "show" information or reactions.
+- **Auditory Output (System Speakers)**: Motor neurons connected to speakers will enable JarvisoBrain to "speak" or produce sound.
+- **Physical Interaction (Hardware Actuators)**: If the system has physical actuators, motor neurons should be able to control them, providing JarvisoBrain with a method to "act" on its environment.
+
+#### Learning and Adaptation:
+The interactions with the hardware should be a source of continuous learning for JarvisoBrain. As it interacts more with its hardware components and receives feedback, it should adapt and optimize these interactions.
+
+in Development Notes
 
 ## Table of Contents
 
@@ -471,25 +490,31 @@ The `if __name__ == "__main__":` section provides a demonstration of how the `Vi
 - **enum**: Used for enumerating message types and processing directives.
 
 #### **Enum `MessageType`**:
-Enumerates the possible types of messages that can be sent within the system. Examples include:
-- Sensory Data
-- Processed Data
-- Memory Request/Response
-- Emotion Signal
-- Feedback
-- Neural Update
-- Interaction
-- ... and others.
+Enumerates the possible types of messages that can be sent within the system. 
+
+- **Sensory Data**: Raw input data collected from sensors, such as visual data from cameras or auditory data from microphones.
+- **Processed Data**: Data that has been processed and refined, usually from the sensory data, and is ready for higher-level operations or storage.
+- **Memory Request/Response**: Represents interactions with the memory system, either requesting a piece of stored information or acknowledging the receipt or storage of data.
+- **Emotion Signal**: Messages that carry information about the current emotional state or mood of the system. This could be influenced by feedback, interactions, or internal dynamics.
+- **Feedback**: Signals that indicate how well the system performed a task or responded to a particular input. It could be in terms of positive, negative, neutral, or no response.
+- **Neural Update**: Notifications or directives to update specific neural pathways, either strengthening, weakening, or modifying them based on learning or feedback.
+- **Interaction**: General messages meant for system-to-system or system-to-user communications. This could be a query, a command acknowledgment, or any other form of interactive messaging.
+- **System Alert**: Messages that highlight or report system-specific events, like errors, performance issues, or hardware/software updates.
+
+---
 
 #### **Enum `ProcessingDirective`**:
-Enumerates the possible directives for processing a message. These dictate how the message should be handled. Examples include:
-- Immediate
-- Deferred
-- Store
-- Recall
-- Learn
-- Activate/Deactivate
-- ... and others.
+Enumerates the possible directives for processing a message. These dictate how the message should be handled. 
+
+- **Immediate**: The message should be processed instantly without any delay. This is crucial for time-sensitive tasks or urgent alerts.
+- **Deferred**: Process the message at a later time, often when the system is less busy or during designated processing intervals.
+- **Store**: The message or the information within it should be stored in memory. This could be for short-term or long-term storage.
+- **Recall**: Fetch specific data or information from storage. This is often in response to a memory request.
+- **Learn**: The system should engage its learning mechanisms to understand, adapt, or modify its behavior based on the message content.
+- **Activate/Deactivate**: Commands to start or stop specific processes, subsystems, or functionalities within the system.
+- **Prioritize**: Elevate the importance of the message, ensuring that it gets processed ahead of other pending tasks.
+- **Archive**: Store the message or its data in a long-term storage solution, often for historical records or backup purposes.
+
 
 #### **Class `BrainMessage`**:
 - Represents a message that can be sent and received within the brain emulation.
