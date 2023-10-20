@@ -26,7 +26,7 @@
 - [Emotion Systems](#emotion-systems)
 - [Decision Making](#decision-making)
 - [Database Connections](#database-connections)
-- [Security and Ethical Considerations](#security-and-ethical-considerations)
+
 
 
 # JarvisoBrain
