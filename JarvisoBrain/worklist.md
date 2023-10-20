@@ -1066,3 +1066,99 @@ This class offers mechanisms to visualize various aspects of the JarvisoBrain sy
 - **Bad Feedback**: May lead to the reconsideration of visualization techniques or formats.
 - **Neutral Feedback**: Could lead to explorations of alternative visualization methods.
 - **No Feedback**: The system might try various visualization techniques to determine which is most informative or engaging.
+
+### Neuromodulatory Systems
+
+#### Cholinergic System (`cholinergic_system.py`)
+
+The Cholinergic System in the brain focuses on the modulation of acetylcholine, a neurotransmitter essential for various cognitive functions. Within JarvisoBrain, the `CholinergicSystem` class emulates the neuromodulatory effects of the cholinergic system, offering mechanisms to influence neural activity based on acetylcholine dynamics.
+
+- **Attributes**:
+  - **acetylcholine_level**: Represents the current acetylcholine concentration within the system, influencing various neural functions, including attention, arousal, and memory.
+  - **parameters**: Configurations guiding the behavior and interactions of the cholinergic system.
+
+- **Methods**:
+  - **__init__(self, parameters)**: Initializes the system with given parameters.
+  - **release_acetylcholine(self, amount)**: Emulates acetylcholine release.
+  - **modulate_neuron(self, neuron)**: Alters neuron behavior based on cholinergic dynamics.
+  - **interact_with_synapse(self, synapse)**: Alters synaptic functions based on cholinergic dynamics.
+  - **adjust_parameters(self, new_parameters)**: Dynamically changes the system's governing parameters.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: Might lead to an increased release of acetylcholine, reinforcing attention and learning processes.
+- **Bad Feedback**: Could inhibit acetylcholine release or accelerate its degradation, potentially leading to decreased attention or learning capabilities.
+- **Neutral Feedback**: Acetylcholine levels might remain stable, neither promoting nor inhibiting specific behaviors.
+- **No Feedback**: The system might increase acetylcholine levels temporarily to enhance attention and promote exploration of new behaviors.
+
+#### Dopamine System (`dopamine_system.py`)
+
+Dopamine, crucial for reward-motivated behavior and several other brain functions, is the focus of the Dopaminergic System in JarvisoBrain.
+
+##### **Class: `DopamineSystem`**
+
+- **Attributes**:
+  - **dopamine_level**: Represents the current dopamine concentration in the system.
+  - **parameters**: Configurations guiding the behavior and interactions of the dopamine system.
+
+- **Methods**:
+  - **__init__(self, parameters)**: Initializes the system with given parameters.
+  - **release_dopamine(self, amount)**: Emulates dopamine release.
+  - **modulate_neuron(self, neuron)**: Alters neuron behavior based on dopamine dynamics.
+  - **interact_with_synapse(self, synapse)**: Alters synaptic functions based on dopamine dynamics.
+  - **adjust_parameters(self, new_parameters)**: Dynamically changes the system's governing parameters.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: Leads to increased dopamine release, reinforcing reward-seeking behaviors.
+- **Bad Feedback**: Reduces dopamine levels or accelerates its degradation, discouraging certain actions.
+- **Neutral Feedback**: Dopamine levels might remain relatively stable.
+- **No Feedback**: The system might promote exploration of new behaviors by temporarily increasing dopamine levels.
+
+#### Noradrenergic System (`noradrenergic_system.py`)
+
+The Noradrenergic System, which revolves around norepinephrine, is essential for attentiveness, emotions, and other functions.
+
+##### **Class: `NoradrenergicSystem`**
+
+- **Attributes**:
+  - **norepinephrine_level**: Represents the current norepinephrine concentration in the system.
+  - **parameters**: Configurations guiding the behavior and interactions of the noradrenergic system.
+
+- **Methods**:
+  - **__init__(self, parameters)**: Initializes the system with given parameters.
+  - **release_norepinephrine(self, amount)**: Emulates norepinephrine release.
+  - **modulate_neuron(self, neuron)**: Alters neuron behavior based on noradrenergic dynamics.
+  - **interact_with_synapse(self, synapse)**: Alters synaptic functions based on noradrenergic dynamics.
+  - **adjust_parameters(self, new_parameters)**: Dynamically changes the system's governing parameters.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: Might increase norepinephrine release, bolstering attention and alertness.
+- **Bad Feedback**: Might decrease norepinephrine levels, potentially inducing relaxation or reduced attention.
+- **Neutral Feedback**: Norepinephrine levels might remain relatively stable.
+- **No Feedback**: The system could promote exploration by temporarily increasing norepinephrine levels.
+
+#### Serotonin System (`serotonin_system.py`)
+
+The Serotonin System, centered around serotonin, affects mood, appetite, and sleep, among other functions.
+
+##### **Class: `SerotoninSystem`**
+
+- **Attributes**:
+  - **serotonin_level**: Represents the current serotonin concentration.
+  - **parameters**: Configurations guiding the behavior and interactions of the serotonin system.
+
+- **Methods**:
+  - **__init__(self, parameters)**: Initializes the system with given parameters.
+  - **release_serotonin(self, amount)**: Emulates serotonin release.
+  - **modulate_neuron(self, neuron)**: Alters neuron behavior based on serotonin dynamics.
+  - **interact_with_synapse(self, synapse)**: Alters synaptic functions based on serotonin dynamics.
+  - **adjust_parameters(self, new_parameters)**: Dynamically changes the system's governing parameters.
+
+##### Feedback Mechanism:
+
+- **Good Feedback**: Could increase serotonin release, promoting positive mood and well-being.
+- **Bad Feedback**: Might reduce serotonin levels, potentially leading to feelings of melancholy.
+- **Neutral Feedback**: Serotonin levels might remain relatively stable.
+- **No Feedback**: The system might try different behaviors to elicit feedback, adjusting serotonin levels to influence mood and receptiveness to new experiences.
