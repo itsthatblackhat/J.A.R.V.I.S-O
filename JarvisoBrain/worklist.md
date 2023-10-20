@@ -1,5 +1,7 @@
 # JarvisoBrain
 
+The JarvisoBrain project is an ambitious endeavor to model the human brain's various components and functionalities digitally. The architecture encompasses different brain regions, neurons, event management, memory storage, and neuromodulatory systems. This README provides a comprehensive overview of its structure, functionalities, and interactions.
+
 ### Hardware Integration
 
 JarvisoBrain's neural structures should be deeply integrated with the available hardware. This integration will make it aware of its "physical" capabilities and limitations, much like a human brain is aware of its body's capabilities and limitations.
