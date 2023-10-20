@@ -1,4 +1,4 @@
-# JarvisoBra
+# JarvisoBrain
 
 ### Hardware Integration
 
