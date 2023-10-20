@@ -10,15 +10,8 @@
    - [Inhibitory Synapses](#inhibitory-synapses)
 4. [Neurotransmitters](#neurotransmitters)
 5. [Neuromodulatory Systems](#neuromodulatory-systems)
-   - [Cholinergic System](#cholinergic-system)
-   - [Dopamine System](#dopamine-system)
-   - [... other neuromodulatory systems]
 6. [Memory Systems](#memory-systems)
-   - [Short-term Memory](#short-term-memory)
-   - [Long-term Memory](#long-term-memory)
-   - [Emotional Memory](#emotional-memory)
 7. [Data Handling](#data-handling)
-   - [Sensory Data Handling](#sensory-data-handling)
    - [OpenCV Data Handling](#opencv-data-handling)
    - [Audio Data Handling](#audio-data-handling)
    - [System Interaction](#system-interaction)
@@ -29,11 +22,20 @@
 11. [Emotion Systems](#emotion-systems)
 12. [Decision Making](#decision-making)
 13. [Database Systems](#database-systems)
-    - [Neurons Database](#neurons-database)
-    - [Synapses Database](#synapses-database)
-    - [... other database sections]
+   - [Neurons Database](#neurons-database)
+   - [Synapses Database](#synapses-database)
+   - [Neurotransmitter Database](#neurotransmitter-database)
+   - [Neuromodulatory Systems Database](#neuromodulatory-systems-database)
+   - [Memory Systems Database](#memory-systems-database)
+   - [Data Handling Database](#data-handling-database)
+   - [Event Management Database](#event-management-database)
+   - [Feedback Systems Database](#feedback-systems-database)
+   - [Communication Systems Database](#communication-systems-database)
+   - [Emotion Systems Database](#emotion-systems-database)
+   - [Decision Making Database](#decision-making-database)
 14. [Hardware Manifest & Body Schema](#hardware-manifest--body-schema)
 15. [Security](#security)
+
 
 
 
