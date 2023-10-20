@@ -1,33 +1,3 @@
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Root Directory Files](#root-directory-files)
-  - [main_brain.py](#main_brainpy)
-- [Brain Regions](#brain-regions)
-  - [Auditory Cortex](#auditory-cortex)
-  - [Basal Ganglia](#basal-ganglia)
-  - [Brainstem](#brainstem)
-  - [Cerebellum](#cerebellum)
-  - [Hippocampus](#hippocampus)
-  - [Hypothalamus](#hypothalamus)
-  - [Prefrontal Cortex](#prefrontal-cortex)
-  - [Somatosensory Cortex](#somatosensory-cortex)
-  - [Thalamus](#thalamus)
-  - [Visual Cortex](#visual-cortex)
-- [Brain Root](#brain-root)
-- [Neural Database](#neural-database)
-- [Neuromodulatory Systems](#neuromodulatory-systems)
-- [Neurons](#neurons)
-  - [Interneurons](#interneurons)
-  - [Motor Neurons](#motor-neurons)
-  - [Sensory Neurons](#sensory-neurons)
-- [Synapses](#synapses)
-  - [Excitatory Synapses](#excitatory-synapses)
-  - [Inhibitory Synapses](#inhibitory-synapses)
-  - [Neuromodulatory Synapses](#neuromodulatory-synapses)
-- [Utilities (Utils)](#utilities-utils)
-
-
 # JarvisoBrain
 
 The JarvisoBrain project is an ambitious endeavor to model the human brain's various components and functionalities digitally. The architecture encompasses different brain regions, neurons, event management, memory storage, and neuromodulatory systems. This worklist.md provides a comprehensive overview of its structure, functionalities, and interactions.
