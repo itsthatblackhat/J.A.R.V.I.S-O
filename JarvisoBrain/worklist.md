@@ -14,15 +14,16 @@
    - [Sensory Data Handling](#sensory-data-handling)
    - [OpenCV Data Handling](#opencv-data-handling)
    - [Audio Handling Data](#audio-handling-data)
-   - [System Interaction](#system-interaction)
-7. [Adaptive Learning with Extendibility](#adaptive-learning-with-extendibility)
-8. [Event Management](#event-management)
-9. [Feedback Systems](#feedback-systems)
-10. [Communication Systems](#communication-systems)
-11. [Emotion Systems](#emotion-systems)
-12. [Decision Making](#decision-making)
-13. [Hardware Manifest & Body Schema](#hardware-manifest--body-schema)
-14. [Database Design and Management](#database-design-and-management)
+7. [System Interaction](#system-interaction)
+8. [Adaptive Learning with Extendibility](#adaptive-learning-with-extendibility)
+9. [Event Management](#event-management)
+10. [Feedback Systems](#feedback-systems)
+11. [Communication Systems](#communication-systems)
+12. [Emotion Systems](#emotion-systems)
+13. [Decision Making](#decision-making)
+14. [Hardware Manifest & Body Schema](#hardware-manifest--body-schema)
+15. [Database Design and Management](#database-design-and-management)
+
 
 
 
